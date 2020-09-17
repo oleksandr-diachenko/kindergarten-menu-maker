@@ -1,8 +1,9 @@
 package com.epam.kindergartermenumaker.dao.entity;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -12,20 +13,21 @@ import javax.persistence.*;
  **/
 @Entity
 @Table(name = "recipe_ingredients")
-@Data
+@Getter
 @Builder
 @EqualsAndHashCode(exclude = "id")
 public class RecipeIngredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter
     private long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Recipe recipe;
+    private final Recipe recipe;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Measurement measurement;
+    private final Measurement measurement;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Quantity quantity;
+    private final Quantity quantity;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Ingredient ingredient;
+    private final Ingredient ingredient;
 }

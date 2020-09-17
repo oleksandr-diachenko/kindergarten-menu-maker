@@ -1,8 +1,9 @@
 package com.epam.kindergartermenumaker.dao.entity;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -12,13 +13,14 @@ import javax.persistence.*;
  **/
 @Entity
 @Table(name = "ingredients")
-@Data
+@Getter
 @Builder
 @EqualsAndHashCode(exclude = "id")
 public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter
     private long id;
-    private String name;
+    private final String name;
 }

@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.epam</groupId>
-    <artifactId>kindergarter-menu-maker</artifactId>
+    <artifactId>kindergarten-menu-maker</artifactId>
     <version>1.0.0</version>
-    <name>kindergarter-menu-maker</name>
+    <name>kindergarten-menu-maker</name>
     <description>A project to help nutritionists design kindergarten menus</description>
 
     <properties>

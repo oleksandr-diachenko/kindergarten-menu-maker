@@ -9,5 +9,4 @@ class KindergarterMenuMakerApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

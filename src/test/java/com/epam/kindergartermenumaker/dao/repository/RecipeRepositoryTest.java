@@ -9,9 +9,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
+import static com.epam.kindergartermenumaker.ConstraintViolationExceptionMessage.NOT_NULL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author : Oleksandr Diachenko
@@ -43,5 +46,17 @@ class RecipeRepositoryTest {
         assertThat(actual).isNotEmpty();
         assertThat(actual.get().getName()).isEqualTo(FRIED_POTATOES);
         assertThat(actual.get().getDescription()).isEqualTo(FRIED_POTATOES_DESCRIPTION);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenNameIsNull() {
+        Recipe recipe = Recipe.builder()
+                .name(null)
+                .description(FRIED_POTATOES_DESCRIPTION)
+                .build();
+
+        assertThatThrownBy(() -> manager.persistAndFlush(recipe))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(NOT_NULL.getMessage());
     }
 }

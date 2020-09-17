@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author : Oleksandr Diachenko
@@ -22,12 +23,16 @@ public class RecipeIngredient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter
     private long id;
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private final Recipe recipe;
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private final Measurement measurement;
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private final Quantity quantity;
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private final Ingredient ingredient;
 }

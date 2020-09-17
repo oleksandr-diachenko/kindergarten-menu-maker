@@ -9,9 +9,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
+import static com.epam.kindergartermenumaker.ConstraintViolationExceptionMessage.GREATER_THEN_ZERO;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author : Oleksandr Diachenko
@@ -40,5 +43,16 @@ class QuantityRepositoryTest {
 
         assertThat(actual).isNotEmpty();
         assertThat(actual.get().getAmount()).isEqualTo(TWO);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenQuantityIsZero() {
+        Quantity quantity = Quantity.builder()
+                .amount(0)
+                .build();
+
+        assertThatThrownBy(() -> manager.persistAndFlush(quantity))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(GREATER_THEN_ZERO.getMessage());
     }
 }

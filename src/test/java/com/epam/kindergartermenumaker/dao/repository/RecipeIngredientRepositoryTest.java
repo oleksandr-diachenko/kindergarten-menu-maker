@@ -9,9 +9,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
+import static com.epam.kindergartermenumaker.ConstraintViolationExceptionMessage.NOT_NULL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author : Oleksandr Diachenko
@@ -47,6 +50,50 @@ class RecipeIngredientRepositoryTest {
         List<RecipeIngredient> actual = recipeIngredientRepository.findByRecipe(friedPotatoes);
 
         assertThat(actual).hasSize(4);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenRecipeIsNull() {
+        Ingredient potato = prepareIngredient(POTATO);
+        Quantity one = prepareQuantity(ONE);
+        Measurement gram = prepareMeasurement(GRAM);
+
+        assertThatThrownBy(() -> prepareRecipeIngredient(null, potato, one, gram))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(NOT_NULL.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenIngredientIsNull() {
+        Recipe friedPotatoes = prepareFriedPotatoRecipe();
+        Quantity one = prepareQuantity(ONE);
+        Measurement gram = prepareMeasurement(GRAM);
+
+        assertThatThrownBy(() -> prepareRecipeIngredient(friedPotatoes, null, one, gram))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(NOT_NULL.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenQuantityIsNull() {
+        Recipe friedPotatoes = prepareFriedPotatoRecipe();
+        Ingredient potato = prepareIngredient(POTATO);
+        Measurement gram = prepareMeasurement(GRAM);
+
+        assertThatThrownBy(() -> prepareRecipeIngredient(friedPotatoes, potato, null, gram))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(NOT_NULL.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenMeasurementIsNull() {
+        Recipe friedPotatoes = prepareFriedPotatoRecipe();
+        Ingredient potato = prepareIngredient(POTATO);
+        Quantity one = prepareQuantity(ONE);
+
+        assertThatThrownBy(() -> prepareRecipeIngredient(friedPotatoes, potato, one, null))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(NOT_NULL.getMessage());
     }
 
     private Recipe prepareFriedPotatoes() {

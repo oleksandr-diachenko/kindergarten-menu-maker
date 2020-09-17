@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 /**
  * @author : Oleksandr Diachenko
@@ -22,5 +23,6 @@ public class Quantity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter
     private long id;
+    @Min(1)
     private final int amount;
 }

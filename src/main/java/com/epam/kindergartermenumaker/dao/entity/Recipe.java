@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author : Oleksandr Diachenko
@@ -22,6 +23,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter
     private long id;
+    @NotNull
     private final String name;
     private final String description;
 }

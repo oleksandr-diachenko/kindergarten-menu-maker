@@ -9,9 +9,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
+import static com.epam.kindergartermenumaker.ConstraintViolationExceptionMessage.NOT_NULL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author : Oleksandr Diachenko
@@ -40,5 +43,16 @@ class MeasurementRepositoryTest {
 
         assertThat(actual).isNotEmpty();
         assertThat(actual.get().getDescription()).isEqualTo(GRAM);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDescriptionIsNull() {
+        Measurement measurement = Measurement.builder()
+                .description(null)
+                .build();
+
+        assertThatThrownBy(() -> manager.persistAndFlush(measurement))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(NOT_NULL.getMessage());
     }
 }

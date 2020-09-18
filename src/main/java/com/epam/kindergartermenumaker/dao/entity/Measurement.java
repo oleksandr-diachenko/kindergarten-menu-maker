@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @ToString
 @Builder
 @EqualsAndHashCode(exclude = "id")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Measurement {
 
     @Id
@@ -22,5 +24,5 @@ public class Measurement {
     @Setter
     private long id;
     @NotNull
-    private final String description;
+    private String description;
 }

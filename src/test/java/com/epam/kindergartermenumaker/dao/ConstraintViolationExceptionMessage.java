@@ -1,4 +1,4 @@
-package com.epam.kindergartermenumaker;
+package com.epam.kindergartermenumaker.dao;
 
 /**
  * @author : Oleksandr Diachenko

@@ -1,9 +1,6 @@
 package com.epam.kindergartermenumaker.dao.entity;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "ingredients")
 @Getter
+@ToString
 @Builder
 @EqualsAndHashCode(exclude = "id")
 public class Ingredient {

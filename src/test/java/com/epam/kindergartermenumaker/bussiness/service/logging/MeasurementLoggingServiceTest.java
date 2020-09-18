@@ -8,7 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author : Oleksandr Diachenko
@@ -18,6 +22,7 @@ import static org.mockito.Mockito.verify;
 class MeasurementLoggingServiceTest {
 
     private static final String GRAM = "Gram";
+    private static final long TEN = 10;
 
     @InjectMocks
     private MeasurementLoggingService service;
@@ -34,5 +39,24 @@ class MeasurementLoggingServiceTest {
         service.save(gram);
 
         verify(repository).save(gram);
+    }
+
+    @Test
+    void shouldReturnNonEmptyWhenFindByIdTriggered() {
+        Measurement gram = Measurement.builder()
+                .description(GRAM)
+                .build();
+        when(repository.findById(TEN)).thenReturn(Optional.of(gram));
+
+        Optional<Measurement> actual = service.findById(TEN);
+
+        assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void shouldReturnEmptyWhenFindByIdTriggered() {
+        Optional<Measurement> actual = service.findById(TEN);
+
+        assertThat(actual).isEmpty();
     }
 }

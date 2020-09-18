@@ -8,7 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author : Oleksandr Diachenko
@@ -18,6 +22,7 @@ import static org.mockito.Mockito.verify;
 class RecipeLoggingServiceTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
+    private static final long TEN = 10;
 
     @InjectMocks
     private RecipeLoggingService service;
@@ -34,5 +39,24 @@ class RecipeLoggingServiceTest {
         service.save(friedPotatoes);
 
         verify(repository).save(friedPotatoes);
+    }
+
+    @Test
+    void shouldReturnNonEmptyWhenFindByIdTriggered() {
+        Recipe friedPotatoes = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .build();
+        when(repository.findById(TEN)).thenReturn(Optional.of(friedPotatoes));
+
+        Optional<Recipe> actual = service.findById(TEN);
+
+        assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void shouldReturnEmptyWhenFindByIdTriggered() {
+        Optional<Recipe> actual = service.findById(TEN);
+
+        assertThat(actual).isEmpty();
     }
 }

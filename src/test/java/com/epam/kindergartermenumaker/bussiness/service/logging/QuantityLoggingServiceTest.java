@@ -8,7 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author : Oleksandr Diachenko
@@ -18,6 +22,7 @@ import static org.mockito.Mockito.verify;
 class QuantityLoggingServiceTest {
 
     private static final int TEN = 10;
+    private static final long FIVE = 5;
 
     @InjectMocks
     private QuantityLoggingService service;
@@ -34,5 +39,24 @@ class QuantityLoggingServiceTest {
         service.save(ten);
 
         verify(repository).save(ten);
+    }
+
+    @Test
+    void shouldReturnNonEmptyWhenFindByIdTriggered() {
+        Quantity ten = Quantity.builder()
+                .amount(TEN)
+                .build();
+        when(repository.findById(FIVE)).thenReturn(Optional.of(ten));
+
+        Optional<Quantity> actual = service.findById(FIVE);
+
+        assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void shouldReturnEmptyWhenFindByIdTriggered() {
+        Optional<Quantity> actual = service.findById(FIVE);
+
+        assertThat(actual).isEmpty();
     }
 }

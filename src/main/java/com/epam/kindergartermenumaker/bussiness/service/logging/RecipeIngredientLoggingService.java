@@ -1,11 +1,14 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import com.epam.kindergartermenumaker.dao.repository.RecipeIngredientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.lang.String.format;
@@ -33,5 +36,19 @@ public class RecipeIngredientLoggingService implements RecipeIngredientService {
         optional.ifPresentOrElse(recipeIngredient -> log.debug(recipeIngredient + " was retrieved"),
                 () -> log.debug(format("Recipe ingredient with id %s not found", id)));
         return optional;
+    }
+
+    @Override
+    public List<RecipeIngredient> findAll() {
+        List<RecipeIngredient> recipeIngredients = IteratorUtils.toList(recipeIngredientRepository.findAll().iterator());
+        log.debug(format("Returned all recipe ingredients: %s", recipeIngredients));
+        return recipeIngredients;
+    }
+
+    @Override
+    public List<RecipeIngredient> findByRecipe(Recipe recipe) {
+        List<RecipeIngredient> recipeIngredients = recipeIngredientRepository.findByRecipe(recipe);
+        log.debug(format("For recipe: %s returned all recipe ingredients: %s", recipe, recipeIngredients));
+        return recipeIngredients;
     }
 }

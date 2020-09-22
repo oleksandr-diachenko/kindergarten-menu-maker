@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
-import static com.epam.kindergartermenumaker.ConstraintViolationExceptionMessage.NOT_NULL;
+import static com.epam.kindergartermenumaker.dao.ConstraintViolationExceptionMessage.NOT_NULL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

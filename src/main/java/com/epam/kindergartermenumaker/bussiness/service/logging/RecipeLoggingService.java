@@ -4,8 +4,10 @@ import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.lang.String.format;
@@ -33,5 +35,12 @@ public class RecipeLoggingService implements RecipeService {
         optional.ifPresentOrElse(recipe -> log.debug(recipe + " was retrieved"),
                 () -> log.debug(format("Recipe with id %s not found", id)));
         return optional;
+    }
+
+    @Override
+    public List<Recipe> findAll() {
+        List<Recipe> recipes = IteratorUtils.toList(recipeRepository.findAll().iterator());
+        log.debug(format("Returned all recipes: %s", recipes));
+        return recipes;
     }
 }

@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @ToString
 @Builder
 @EqualsAndHashCode(exclude = "id")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ingredient {
 
     @Id
@@ -22,5 +24,5 @@ public class Ingredient {
     @Setter
     private long id;
     @NotNull
-    private final String name;
+    private String name;
 }

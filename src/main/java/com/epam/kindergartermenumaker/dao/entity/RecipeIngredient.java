@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @ToString
 @Builder
 @EqualsAndHashCode(exclude = "id")
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecipeIngredient {
 
     @Id
@@ -23,14 +25,14 @@ public class RecipeIngredient {
     private long id;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private final Recipe recipe;
+    private Recipe recipe;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private final Measurement measurement;
+    private Measurement measurement;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private final Quantity quantity;
+    private Quantity quantity;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private final Ingredient ingredient;
+    private Ingredient ingredient;
 }

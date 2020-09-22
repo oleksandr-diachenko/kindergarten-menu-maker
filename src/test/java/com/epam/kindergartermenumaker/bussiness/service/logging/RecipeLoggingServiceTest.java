@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,5 +59,17 @@ class RecipeLoggingServiceTest {
         Optional<Recipe> actual = service.findById(TEN);
 
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void shouldReturnAllRecipesWhenFindAllTriggered() {
+        Recipe friedPotatoes = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .build();
+        when(repository.findAll()).thenReturn(List.of(friedPotatoes));
+
+        List<Recipe> actual = service.findAll();
+
+        assertThat(actual).containsExactly(friedPotatoes);
     }
 }

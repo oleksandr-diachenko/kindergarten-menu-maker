@@ -1,7 +1,9 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,4 +15,8 @@ public interface RecipeIngredientService {
     void save(RecipeIngredient recipeIngredient);
 
     Optional<RecipeIngredient> findById(long id);
+
+    List<RecipeIngredient> findAll();
+
+    List<RecipeIngredient> findByRecipe(Recipe recipe);
 }

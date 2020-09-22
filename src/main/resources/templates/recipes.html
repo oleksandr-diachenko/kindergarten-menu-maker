@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="fragments/head :: head"></head>
+<body>
+<nav th:replace="fragments/header :: header"></nav>
+<div class="container">
+    <div class="mt-5">
+        <div id="accordion" th:each="recipe,iter : ${recipes}">
+            <div class="card">
+                <div class="card-header" th:id="heading + ${iter.index}">
+                    <h5 class="mb-0">
+                        <button th:text="${recipe.recipe.name}" class="btn btn-link" data-toggle="collapse"
+                                aria-expanded="true"
+                                th:attr="aria-controls='collapse' + ${iter.index}, data-target='#collapse' + ${iter.index}">
+                        </button>
+                    </h5>
+                </div>
+
+                <div th:id="collapse + ${iter.index}" class="collapse"
+                     th:attr="aria-labelledby='heading' + ${iter.index}">
+                    <div class="card-body">
+                        <span class="font-italic"> Описание:</span>
+                        <p class="border" th:text="${recipe.recipe.description}"></p>
+                        <span class="font-italic"> Ингредиенты:</span>
+                        <div class="border">
+                            <div th:each="ingredient : ${recipe.ingredients}">
+                                <span th:text="${ingredient.ingredient.name} + ' ' +
+                                 ${ingredient.quantity.amount} + ' ' +
+                                 ${ingredient.measurement.description}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

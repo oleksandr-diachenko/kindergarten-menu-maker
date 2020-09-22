@@ -15,6 +15,8 @@ import javax.validation.constraints.Min;
 @ToString
 @Builder
 @EqualsAndHashCode(exclude = "id")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Quantity {
 
     @Id
@@ -22,5 +24,5 @@ public class Quantity {
     @Setter
     private long id;
     @Min(1)
-    private final int amount;
+    private int amount;
 }

@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:include="fragments/head :: head"></head>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Kindergarten menu</title>
+</head>
 <body>
-<nav th:replace="fragments/header :: header"></nav>
-<div class="container">
-    <a href="/recipes">Recipes page</a>
+<div layout:fragment="content" >
+    <div class="container">
+        <a href="/recipes">Recipes page</a>
+    </div>
 </div>
-<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

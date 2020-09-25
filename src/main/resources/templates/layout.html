@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE"></title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet"
+          type="text/css"/>
+    <link th:href="@{/css/footer.css}" rel="stylesheet"/></head>
+<body>
+
+<!-- Main Navigation -->
+<nav class="mb-1 navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" th:href="@{/}">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+            aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+
+<!-- Content Section -->
+<section layout:fragment="content">
+    <p>This is filled by the content template.</p>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer font-small bg-light mt-5 text-white">
+    <div class="pb-5 pt-5">
+        <div id="social-network" class="d-flex justify-content-center">
+            <a class="nav-link" href="https://www.facebook.com/aleksander.diachenko">
+                <em class="fab fa-facebook-f"></em></a>
+            <a class="nav-link" href="https://www.linkedin.com/in/alexander-diachenko/">
+                <em class="fab fa-linkedin-in"></em></a>
+            <a class="nav-link" href="https://github.com/oleksandr-diachenko">
+                <em class="fab fa-github"></em></a>
+            <a class="nav-link" href="https://t.me/Oleksandr_Diachenko">
+                <em class="fab fa-telegram"></em></a>
+            <a class="nav-link" href="mailto:mail.positiv@gmail.com">
+                <em class="fas fa-at"></em></a>
+        </div>
+    </div>
+    <div class="bg-secondary footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://github.com/oleksandr-diachenko" class="text-white">Oleksandr Diachenko</a>
+    </div>
+</footer>
+</body>
+</html>

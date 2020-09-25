@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:include="fragments/head :: head"></head>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Recipes</title>
+</head>
 <body>
-<nav th:replace="fragments/header :: header"></nav>
+<div layout:fragment="content">
+
 <div class="container">
     <div class="mt-5">
         <div id="accordion" th:each="recipe,iter : ${recipes}">
@@ -35,6 +40,6 @@
         </div>
     </div>
 </div>
-<footer th:replace="fragments/footer :: footer"></footer>
+</div>
 </body>
 </html>

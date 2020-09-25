@@ -1,4 +1,4 @@
-package com.epam.kindergartermenumaker.bussiness.service.converter;
+package com.epam.kindergartermenumaker.web.converter;
 
 /**
  * @author : Oleksandr Diachenko

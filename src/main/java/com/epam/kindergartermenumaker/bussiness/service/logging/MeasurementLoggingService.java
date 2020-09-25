@@ -22,9 +22,10 @@ public class MeasurementLoggingService implements MeasurementService {
     private final MeasurementRepository measurementRepository;
 
     @Override
-    public void save(Measurement measurement) {
-        measurementRepository.save(measurement);
-        log.info(measurement + " was saved");
+    public Measurement save(Measurement measurement) {
+        Measurement saved = measurementRepository.save(measurement);
+        log.info(saved + " was saved");
+        return saved;
     }
 
     @Override

@@ -35,9 +35,11 @@ class QuantityLoggingServiceTest {
         Quantity ten = Quantity.builder()
                 .amount(TEN)
                 .build();
+        when(repository.save(ten)).thenReturn(ten);
 
-        service.save(ten);
+        Quantity actual = service.save(ten);
 
+        assertThat(actual.getAmount()).isEqualTo(TEN);
         verify(repository).save(ten);
     }
 

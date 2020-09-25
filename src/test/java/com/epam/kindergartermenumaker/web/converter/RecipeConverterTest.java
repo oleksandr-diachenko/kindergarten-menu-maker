@@ -1,9 +1,9 @@
-package com.epam.kindergartermenumaker.bussiness.service.converter;
+package com.epam.kindergartermenumaker.web.converter;
 
-import com.epam.kindergartermenumaker.bussiness.service.converter.RecipeConverter;
-import com.epam.kindergartermenumaker.bussiness.service.converter.RecipeDTO;
 import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeIngredientService;
 import com.epam.kindergartermenumaker.dao.entity.*;
+import com.epam.kindergartermenumaker.web.converter.recipe.RecipeConverter;
+import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,7 +1,7 @@
 package com.epam.kindergartermenumaker.web.controller;
 
-import com.epam.kindergartermenumaker.bussiness.service.converter.RecipeConverterService;
-import com.epam.kindergartermenumaker.bussiness.service.converter.RecipeDTO;
+import com.epam.kindergartermenumaker.web.converter.category.CategoryConverterService;
+import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecipeController {
 
-    private final RecipeConverterService recipeConverterService;
+    private final CategoryConverterService categoryConverterService;
 
     @GetMapping
-    public String getAllRecipes(Model model) {
-        List<RecipeDTO> recipeDTOS = recipeConverterService.getAllRecipes();
-        model.addAttribute("recipes", recipeDTOS);
+    public String getAllCategories(Model model) {
+        List<CategoryDTO> categoryDTOS = categoryConverterService.getAllCategories();
+        model.addAttribute("categories", categoryDTOS);
         return "recipes";
     }
 }

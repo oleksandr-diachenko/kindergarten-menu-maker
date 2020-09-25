@@ -37,6 +37,7 @@ class RecipeIngredientRepositoryTest {
     private static final int FIFTY = 50;
     private static final String FRIED_POTATOES = "Fried potatoes";
     private static final String FRIED_POTATOES_IN_A_SKILLET = "Fried potatoes in a skillet";
+    private static final String MAIN_COURSE = "Main course";
 
     @Autowired
     private TestEntityManager manager;
@@ -45,7 +46,8 @@ class RecipeIngredientRepositoryTest {
 
     @Test
     void shouldReturnFriedPotatoesIngredientsWhenPersisted() {
-        Recipe friedPotatoes = prepareFriedPotatoes();
+        Category mainCourse = prepareCategory();
+        Recipe friedPotatoes = prepareFriedPotatoes(mainCourse);
 
         List<RecipeIngredient> actual = recipeIngredientRepository.findByRecipe(friedPotatoes);
 
@@ -65,7 +67,8 @@ class RecipeIngredientRepositoryTest {
 
     @Test
     void shouldThrowExceptionWhenIngredientIsNull() {
-        Recipe friedPotatoes = prepareFriedPotatoRecipe();
+        Category mainCourse = prepareCategory();
+        Recipe friedPotatoes = prepareFriedPotatoRecipe(mainCourse);
         Quantity one = prepareQuantity(ONE);
         Measurement gram = prepareMeasurement(GRAM);
 
@@ -76,7 +79,8 @@ class RecipeIngredientRepositoryTest {
 
     @Test
     void shouldThrowExceptionWhenQuantityIsNull() {
-        Recipe friedPotatoes = prepareFriedPotatoRecipe();
+        Category mainCourse = prepareCategory();
+        Recipe friedPotatoes = prepareFriedPotatoRecipe(mainCourse);
         Ingredient potato = prepareIngredient(POTATO);
         Measurement gram = prepareMeasurement(GRAM);
 
@@ -87,7 +91,8 @@ class RecipeIngredientRepositoryTest {
 
     @Test
     void shouldThrowExceptionWhenMeasurementIsNull() {
-        Recipe friedPotatoes = prepareFriedPotatoRecipe();
+        Category mainCourse = prepareCategory();
+        Recipe friedPotatoes = prepareFriedPotatoRecipe(mainCourse);
         Ingredient potato = prepareIngredient(POTATO);
         Quantity one = prepareQuantity(ONE);
 
@@ -96,8 +101,8 @@ class RecipeIngredientRepositoryTest {
                 .hasMessageContaining(NOT_NULL.getMessage());
     }
 
-    private Recipe prepareFriedPotatoes() {
-        Recipe friedPotatoes = prepareFriedPotatoRecipe();
+    private Recipe prepareFriedPotatoes(Category category) {
+        Recipe friedPotatoes = prepareFriedPotatoRecipe(category);
 
         Ingredient potato = prepareIngredient(POTATO);
         Ingredient salt = prepareIngredient(SALT);
@@ -148,12 +153,21 @@ class RecipeIngredientRepositoryTest {
         return ingredient;
     }
 
-    private Recipe prepareFriedPotatoRecipe() {
+    private Recipe prepareFriedPotatoRecipe(Category category) {
         Recipe friedPotatoes = Recipe.builder()
                 .name(FRIED_POTATOES)
                 .description(FRIED_POTATOES_IN_A_SKILLET)
+                .category(category)
                 .build();
         manager.persistAndFlush(friedPotatoes);
         return friedPotatoes;
+    }
+
+    private Category prepareCategory() {
+        Category category = Category.builder()
+                .name(MAIN_COURSE)
+                .build();
+        manager.persistAndFlush(category);
+        return category;
     }
 }

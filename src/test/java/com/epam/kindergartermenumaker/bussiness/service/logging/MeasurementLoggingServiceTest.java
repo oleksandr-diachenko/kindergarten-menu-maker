@@ -35,9 +35,11 @@ class MeasurementLoggingServiceTest {
         Measurement gram = Measurement.builder()
                 .description(GRAM)
                 .build();
+        when(repository.save(gram)).thenReturn(gram);
 
-        service.save(gram);
+        Measurement actual = service.save(gram);
 
+        assertThat(actual.getDescription()).isEqualTo(GRAM);
         verify(repository).save(gram);
     }
 

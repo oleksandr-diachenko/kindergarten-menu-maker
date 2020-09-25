@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,10 @@ public class RecipeLoggingService implements RecipeService {
     private final RecipeRepository recipeRepository;
 
     @Override
-    public void save(Recipe recipe) {
-        recipeRepository.save(recipe);
-        log.info(recipe + " was saved");
+    public Recipe save(Recipe recipe) {
+        Recipe saved = recipeRepository.save(recipe);
+        log.info(saved + " was saved");
+        return saved;
     }
 
     @Override
@@ -41,6 +43,13 @@ public class RecipeLoggingService implements RecipeService {
     public List<Recipe> findAll() {
         List<Recipe> recipes = IteratorUtils.toList(recipeRepository.findAll().iterator());
         log.debug(format("Returned all recipes: %s", recipes));
+        return recipes;
+    }
+
+    @Override
+    public List<Recipe> findByCategory(Category category) {
+        List<Recipe> recipes = recipeRepository.findByCategory(category);
+        log.debug(format("For category: %s returned all recipes: %s", category, recipes));
         return recipes;
     }
 }

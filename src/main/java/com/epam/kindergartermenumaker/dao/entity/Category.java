@@ -7,17 +7,17 @@ import javax.validation.constraints.NotNull;
 
 /**
  * @author : Oleksandr Diachenko
- * @since : 9/17/2020
+ * @since : 9/25/2020
  **/
 @Entity
-@Table(name = "recipes")
+@Table(name = "categories")
 @Getter
 @ToString
 @Builder
 @EqualsAndHashCode(exclude = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Recipe {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,8 +25,4 @@ public class Recipe {
     private long id;
     @NotNull
     private String name;
-    private String description;
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Category category;
 }

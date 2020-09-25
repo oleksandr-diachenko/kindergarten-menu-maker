@@ -10,7 +10,7 @@ import java.util.Optional;
  **/
 public interface IngredientService {
 
-    void save(Ingredient ingredient);
+    Ingredient save(Ingredient ingredient);
 
     Optional<Ingredient> findById(long id);
 }

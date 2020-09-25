@@ -12,7 +12,7 @@ import java.util.Optional;
  **/
 public interface RecipeIngredientService {
 
-    void save(RecipeIngredient recipeIngredient);
+    RecipeIngredient save(RecipeIngredient recipeIngredient);
 
     Optional<RecipeIngredient> findById(long id);
 

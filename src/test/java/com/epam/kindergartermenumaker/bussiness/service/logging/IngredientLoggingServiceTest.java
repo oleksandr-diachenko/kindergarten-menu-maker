@@ -34,9 +34,11 @@ class IngredientLoggingServiceTest {
         Ingredient salt = Ingredient.builder()
                 .name(SALT)
                 .build();
+        when(repository.save(salt)).thenReturn(salt);
 
-        service.save(salt);
+        Ingredient actual = service.save(salt);
 
+        assertThat(actual.getName()).isEqualTo(SALT);
         verify(repository).save(salt);
     }
 

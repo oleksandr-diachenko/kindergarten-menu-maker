@@ -1,4 +1,4 @@
-package com.epam.kindergartermenumaker.bussiness.service.converter;
+package com.epam.kindergartermenumaker.web.converter.recipe;
 
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;

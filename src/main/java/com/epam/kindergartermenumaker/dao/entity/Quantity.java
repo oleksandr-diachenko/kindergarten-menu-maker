@@ -24,5 +24,7 @@ public class Quantity {
     @Setter
     private long id;
     @Min(1)
-    private int amount;
+    private double amountGross;
+    @Min(1)
+    private double amountNet;
 }

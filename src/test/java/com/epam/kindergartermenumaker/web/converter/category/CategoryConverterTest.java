@@ -1,8 +1,9 @@
-package com.epam.kindergartermenumaker.web.converter;
+package com.epam.kindergartermenumaker.web.converter.category;
 
 import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeService;
 import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
+import com.epam.kindergartermenumaker.web.converter.Converter;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryConverter;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
 import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
@@ -35,7 +36,7 @@ class CategoryConverterTest {
     private Converter<Recipe, RecipeDTO> recipeToDTOConverter;
 
     @Test
-    void shouldSetAllRecipeIngredientAndReturnRecipesPage() {
+    void shouldSetAllRecipeIngredient() {
         Category mainSource = Category.builder().name(MAIN_SOURCE).build();
         Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).build();
         when(recipeService.findByCategory(mainSource)).thenReturn(List.of(friedPotatoes));

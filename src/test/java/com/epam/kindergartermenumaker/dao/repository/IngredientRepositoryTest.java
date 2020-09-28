@@ -36,6 +36,9 @@ class IngredientRepositoryTest {
     void shouldReturnIngredientWhenPersisted() {
         Ingredient salt = Ingredient.builder()
                 .name(SALT)
+                .fat(1)
+                .protein(2)
+                .carbohydrate(3)
                 .build();
         manager.persistAndFlush(salt);
 

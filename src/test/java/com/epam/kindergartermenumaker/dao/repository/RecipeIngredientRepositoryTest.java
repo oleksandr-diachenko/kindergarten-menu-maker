@@ -57,7 +57,7 @@ class RecipeIngredientRepositoryTest {
     @Test
     void shouldThrowExceptionWhenRecipeIsNull() {
         Ingredient potato = prepareIngredient(POTATO);
-        Quantity one = prepareQuantity(ONE);
+        Quantity one = prepareQuantity(ONE, ONE);
         Measurement gram = prepareMeasurement(GRAM);
 
         assertThatThrownBy(() -> prepareRecipeIngredient(null, potato, one, gram))
@@ -69,7 +69,7 @@ class RecipeIngredientRepositoryTest {
     void shouldThrowExceptionWhenIngredientIsNull() {
         Category mainCourse = prepareCategory();
         Recipe friedPotatoes = prepareFriedPotatoRecipe(mainCourse);
-        Quantity one = prepareQuantity(ONE);
+        Quantity one = prepareQuantity(ONE, ONE);
         Measurement gram = prepareMeasurement(GRAM);
 
         assertThatThrownBy(() -> prepareRecipeIngredient(friedPotatoes, null, one, gram))
@@ -94,7 +94,7 @@ class RecipeIngredientRepositoryTest {
         Category mainCourse = prepareCategory();
         Recipe friedPotatoes = prepareFriedPotatoRecipe(mainCourse);
         Ingredient potato = prepareIngredient(POTATO);
-        Quantity one = prepareQuantity(ONE);
+        Quantity one = prepareQuantity(ONE, ONE);
 
         assertThatThrownBy(() -> prepareRecipeIngredient(friedPotatoes, potato, one, null))
                 .isInstanceOf(ConstraintViolationException.class)
@@ -112,10 +112,10 @@ class RecipeIngredientRepositoryTest {
         Measurement gram = prepareMeasurement(GRAM);
         Measurement ml = prepareMeasurement(MILLILITER);
 
-        Quantity one = prepareQuantity(ONE);
-        Quantity ten = prepareQuantity(TEN);
-        Quantity five = prepareQuantity(FIVE);
-        Quantity fifty = prepareQuantity(FIFTY);
+        Quantity one = prepareQuantity(ONE, ONE);
+        Quantity ten = prepareQuantity(TEN, TEN);
+        Quantity five = prepareQuantity(FIVE, FIVE);
+        Quantity fifty = prepareQuantity(FIFTY, FIFTY);
 
         prepareRecipeIngredient(friedPotatoes, potato, one, gram);
         prepareRecipeIngredient(friedPotatoes, salt, ten, gram);
@@ -129,7 +129,8 @@ class RecipeIngredientRepositoryTest {
         RecipeIngredient recipeIngredient = RecipeIngredient.builder()
                 .recipe(recipe)
                 .ingredient(ingredient)
-                .quantity(quantity)
+                .kindergartenQuantity(quantity)
+                .nurseryQuantity(quantity)
                 .measurement(measurement)
                 .build();
         manager.persistAndFlush(recipeIngredient);
@@ -141,8 +142,8 @@ class RecipeIngredientRepositoryTest {
         return measurement;
     }
 
-    private Quantity prepareQuantity(int amount) {
-        Quantity quantity = Quantity.builder().amount(amount).build();
+    private Quantity prepareQuantity(int amountNet, int amountGross) {
+        Quantity quantity = Quantity.builder().amountNet(amountNet).amountGross(amountGross).build();
         manager.persistAndFlush(quantity);
         return quantity;
     }

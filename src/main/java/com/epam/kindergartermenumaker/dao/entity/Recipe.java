@@ -25,6 +25,7 @@ public class Recipe {
     private long id;
     @NotNull
     private String name;
+    @Column(length = 5000)
     private String description;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

@@ -25,4 +25,7 @@ public class Ingredient {
     private long id;
     @NotNull
     private String name;
+    private double protein;
+    private double fat;
+    private double carbohydrate;
 }

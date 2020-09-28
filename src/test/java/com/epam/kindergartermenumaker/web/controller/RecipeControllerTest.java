@@ -1,12 +1,12 @@
 package com.epam.kindergartermenumaker.web.controller;
 
 import com.epam.kindergartermenumaker.dao.entity.Category;
-import com.epam.kindergartermenumaker.web.converter.category.CategoryConverter;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryConverterService;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
 import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
+import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,7 +41,7 @@ class RecipeControllerTest {
     void shouldSetRecipeDTOsAndReturnRecipesPage() {
         Category mainCourse = Category.builder().name(MAIN_COURSE).build();
         Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).category(mainCourse).build();
-        List<RecipeIngredient> friedPotatoesRecipeIngredients = List.of(buildRecipeIngredient(friedPotatoes));
+        List<RecipeIngredientDTO> friedPotatoesRecipeIngredients = List.of(buildRecipeIngredientDTO(friedPotatoes));
         RecipeDTO friedPotatoesDTO = buildRecipeDTO(friedPotatoes, friedPotatoesRecipeIngredients);
         List<RecipeDTO> recipeDTOs = List.of(friedPotatoesDTO);
         CategoryDTO mainCourseDTO = buildCategoryDTO(mainCourse, recipeDTOs);
@@ -61,14 +61,17 @@ class RecipeControllerTest {
                 .build();
     }
 
-    private RecipeIngredient buildRecipeIngredient(Recipe recipe) {
-        return RecipeIngredient.builder()
+    private RecipeIngredientDTO buildRecipeIngredientDTO(Recipe recipe) {
+        RecipeIngredient recipeIngredient = RecipeIngredient.builder()
                 .id(10)
                 .recipe(recipe)
                 .build();
+        return RecipeIngredientDTO.builder()
+                .recipeIngredient(recipeIngredient)
+                .build();
     }
 
-    private RecipeDTO buildRecipeDTO(Recipe recipe, List<RecipeIngredient> recipeIngredients) {
+    private RecipeDTO buildRecipeDTO(Recipe recipe, List<RecipeIngredientDTO> recipeIngredients) {
         return RecipeDTO.builder()
                 .recipe(recipe)
                 .ingredients(recipeIngredients)

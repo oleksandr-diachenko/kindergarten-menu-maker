@@ -35,20 +35,34 @@ class QuantityRepositoryTest {
     @Test
     void shouldReturnQuantityWhenPersisted() {
         Quantity two = Quantity.builder()
-                .amount(TWO)
+                .amountNet(TWO)
+                .amountGross(TWO)
                 .build();
         manager.persistAndFlush(two);
 
         Optional<Quantity> actual = quantityRepository.findById(two.getId());
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getAmount()).isEqualTo(TWO);
+        assertThat(actual.get().getAmountNet()).isEqualTo(TWO);
+        assertThat(actual.get().getAmountGross()).isEqualTo(TWO);
     }
 
     @Test
-    void shouldThrowExceptionWhenQuantityIsZero() {
+    void shouldThrowExceptionWhenQuantityNetIsZero() {
         Quantity quantity = Quantity.builder()
-                .amount(0)
+                .amountNet(0)
+                .build();
+
+        assertThatThrownBy(() -> manager.persistAndFlush(quantity))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(GREATER_THEN_ZERO.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenQuantityGrossIsZero() {
+        Quantity quantity = Quantity.builder()
+                .amountNet(TWO)
+                .amountGross(0)
                 .build();
 
         assertThatThrownBy(() -> manager.persistAndFlush(quantity))

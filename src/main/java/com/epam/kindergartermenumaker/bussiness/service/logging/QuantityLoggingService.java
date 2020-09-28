@@ -22,9 +22,10 @@ public class QuantityLoggingService implements QuantityService {
     private final QuantityRepository quantityRepository;
 
     @Override
-    public void save(Quantity quantity) {
-        quantityRepository.save(quantity);
-        log.info(quantity + " was saved");
+    public Quantity save(Quantity quantity) {
+        Quantity saved = quantityRepository.save(quantity);
+        log.info(saved + " was saved");
+        return saved;
     }
 
     @Override

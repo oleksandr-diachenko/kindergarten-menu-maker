@@ -1,7 +1,8 @@
-package com.epam.kindergartermenumaker.bussiness.service.converter;
+package com.epam.kindergartermenumaker.web.converter.recipe;
 
 import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeIngredientService;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
+import com.epam.kindergartermenumaker.web.converter.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

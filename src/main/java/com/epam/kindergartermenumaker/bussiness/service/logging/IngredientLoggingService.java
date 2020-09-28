@@ -22,9 +22,10 @@ public class IngredientLoggingService implements IngredientService {
     private final IngredientRepository ingredientRepository;
 
     @Override
-    public void save(Ingredient ingredient) {
-        ingredientRepository.save(ingredient);
-        log.info(ingredient + " was saved");
+    public Ingredient save(Ingredient ingredient) {
+        Ingredient saved = ingredientRepository.save(ingredient);
+        log.info(saved + " was saved");
+        return saved;
     }
 
     @Override

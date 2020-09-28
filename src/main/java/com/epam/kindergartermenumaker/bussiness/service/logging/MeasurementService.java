@@ -10,7 +10,7 @@ import java.util.Optional;
  **/
 public interface MeasurementService {
 
-    void save(Measurement measurement);
+    Measurement save(Measurement measurement);
 
     Optional<Measurement> findById(long id);
 }

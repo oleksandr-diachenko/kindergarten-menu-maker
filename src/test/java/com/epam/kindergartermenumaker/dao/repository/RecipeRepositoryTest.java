@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.dao.repository;
 
+import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ class RecipeRepositoryTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
     private static final String FRIED_POTATOES_DESCRIPTION = "Fried potatoes in a skillet";
+    private static final String MAIN_COURSE = "Main course";
 
     @Autowired
     private TestEntityManager manager;
@@ -35,9 +37,11 @@ class RecipeRepositoryTest {
 
     @Test
     void shouldReturnQuantityWhenPersisted() {
+        Category mainCourse = prepareCategory();
         Recipe friedPotatoes = Recipe.builder()
                 .name(FRIED_POTATOES)
                 .description(FRIED_POTATOES_DESCRIPTION)
+                .category(mainCourse)
                 .build();
         manager.persistAndFlush(friedPotatoes);
 
@@ -58,5 +62,26 @@ class RecipeRepositoryTest {
         assertThatThrownBy(() -> manager.persistAndFlush(recipe))
                 .isInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining(NOT_NULL.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCategoryIsEmpty() {
+        Recipe recipe = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .description(FRIED_POTATOES_DESCRIPTION)
+                .category(null)
+                .build();
+
+        assertThatThrownBy(() -> manager.persistAndFlush(recipe))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining(NOT_NULL.getMessage());
+    }
+
+    private Category prepareCategory() {
+        Category category = Category.builder()
+                .name(MAIN_COURSE)
+                .build();
+        manager.persistAndFlush(category);
+        return category;
     }
 }

@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.repository.RecipeRepository;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 class RecipeLoggingServiceTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
+    private static final String MAIN_SOURCE = "Main source";
     private static final long TEN = 10;
 
     @InjectMocks
@@ -36,9 +38,11 @@ class RecipeLoggingServiceTest {
         Recipe friedPotatoes = Recipe.builder()
                 .name(FRIED_POTATOES)
                 .build();
+        when(repository.save(friedPotatoes)).thenReturn(friedPotatoes);
 
-        service.save(friedPotatoes);
+        Recipe actual = service.save(friedPotatoes);
 
+        assertThat(actual.getName()).isEqualTo(FRIED_POTATOES);
         verify(repository).save(friedPotatoes);
     }
 
@@ -69,6 +73,17 @@ class RecipeLoggingServiceTest {
         when(repository.findAll()).thenReturn(List.of(friedPotatoes));
 
         List<Recipe> actual = service.findAll();
+
+        assertThat(actual).containsExactly(friedPotatoes);
+    }
+
+    @Test
+    void shouldReturnAllRecipesByCategoryWhenFindByCategoryTriggered() {
+        Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).build();
+        Category mainSource = Category.builder().name(MAIN_SOURCE).build();
+        when(repository.findByCategory(mainSource)).thenReturn(List.of(friedPotatoes));
+
+        List<Recipe> actual = service.findByCategory(mainSource);
 
         assertThat(actual).containsExactly(friedPotatoes);
     }

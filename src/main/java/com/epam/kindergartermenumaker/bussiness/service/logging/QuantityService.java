@@ -10,7 +10,7 @@ import java.util.Optional;
  **/
 public interface QuantityService {
 
-    void save(Quantity quantity);
+    Quantity save(Quantity quantity);
 
     Optional<Quantity> findById(long id);
 }

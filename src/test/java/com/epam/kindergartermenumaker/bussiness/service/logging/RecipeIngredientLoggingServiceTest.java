@@ -36,9 +36,11 @@ class RecipeIngredientLoggingServiceTest {
         RecipeIngredient dummy = RecipeIngredient.builder()
                 .id(1)
                 .build();
+        when(repository.save(dummy)).thenReturn(dummy);
 
-        service.save(dummy);
+        RecipeIngredient actual = service.save(dummy);
 
+        assertThat(actual.getId()).isEqualTo(1);
         verify(repository).save(dummy);
     }
 

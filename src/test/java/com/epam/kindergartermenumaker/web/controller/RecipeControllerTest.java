@@ -1,7 +1,10 @@
 package com.epam.kindergartermenumaker.web.controller;
 
-import com.epam.kindergartermenumaker.bussiness.service.converter.RecipeConverterService;
-import com.epam.kindergartermenumaker.bussiness.service.converter.RecipeDTO;
+import com.epam.kindergartermenumaker.dao.entity.Category;
+import com.epam.kindergartermenumaker.web.converter.category.CategoryConverter;
+import com.epam.kindergartermenumaker.web.converter.category.CategoryConverterService;
+import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
+import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import org.junit.jupiter.api.Test;
@@ -25,26 +28,37 @@ import static org.mockito.Mockito.when;
 class RecipeControllerTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
+    private static final String MAIN_COURSE = "Main course";
 
     @InjectMocks
     private RecipeController controller;
     @Mock
-    private RecipeConverterService service;
+    private CategoryConverterService service;
     @Mock
     private Model model;
 
     @Test
     void shouldSetRecipeDTOsAndReturnRecipesPage() {
-        Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).build();
+        Category mainCourse = Category.builder().name(MAIN_COURSE).build();
+        Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).category(mainCourse).build();
         List<RecipeIngredient> friedPotatoesRecipeIngredients = List.of(buildRecipeIngredient(friedPotatoes));
         RecipeDTO friedPotatoesDTO = buildRecipeDTO(friedPotatoes, friedPotatoesRecipeIngredients);
         List<RecipeDTO> recipeDTOs = List.of(friedPotatoesDTO);
-        when(service.getAllRecipes()).thenReturn(recipeDTOs);
+        CategoryDTO mainCourseDTO = buildCategoryDTO(mainCourse, recipeDTOs);
+        List<CategoryDTO> categoriesDTOs = List.of(mainCourseDTO);
+        when(service.getAllCategories()).thenReturn(categoriesDTOs);
 
-        String allRecipes = controller.getAllRecipes(model);
+        String allCategories = controller.getAllCategories(model);
 
-        assertThat(allRecipes).isEqualTo("recipes");
-        verify(model).addAttribute("recipes", recipeDTOs);
+        assertThat(allCategories).isEqualTo("recipes");
+        verify(model).addAttribute("categories", categoriesDTOs);
+    }
+
+    private CategoryDTO buildCategoryDTO(Category category, List<RecipeDTO> recipeDTOS) {
+        return CategoryDTO.builder()
+                .category(category)
+                .recipes(recipeDTOS)
+                .build();
     }
 
     private RecipeIngredient buildRecipeIngredient(Recipe recipe) {

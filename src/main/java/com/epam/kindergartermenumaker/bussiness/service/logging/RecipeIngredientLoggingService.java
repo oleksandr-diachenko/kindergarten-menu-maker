@@ -25,9 +25,10 @@ public class RecipeIngredientLoggingService implements RecipeIngredientService {
     private final RecipeIngredientRepository recipeIngredientRepository;
 
     @Override
-    public void save(RecipeIngredient recipeIngredient) {
-        recipeIngredientRepository.save(recipeIngredient);
-        log.info(recipeIngredient + " was saved");
+    public RecipeIngredient save(RecipeIngredient recipeIngredient) {
+        RecipeIngredient saved = recipeIngredientRepository.save(recipeIngredient);
+        log.info(saved + " was saved");
+        return saved;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.epam.kindergartermenumaker.dao.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 
 /**
  * @author : Oleksandr Diachenko
@@ -20,11 +19,9 @@ import javax.validation.constraints.Min;
 public class Quantity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Setter
     private long id;
-    @Min(1)
     private double amountGross;
-    @Min(1)
     private double amountNet;
 }

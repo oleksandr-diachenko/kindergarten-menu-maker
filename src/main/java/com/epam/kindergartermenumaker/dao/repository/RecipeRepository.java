@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author : Oleksandr Diachenko
@@ -15,4 +16,8 @@ import java.util.List;
 public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 
     List<Recipe> findByCategory(Category category);
+
+    boolean existsByName(String name);
+
+    Optional<Recipe> findByName(String name);
 }

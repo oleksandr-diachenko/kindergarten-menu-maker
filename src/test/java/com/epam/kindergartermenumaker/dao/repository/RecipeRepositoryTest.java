@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.validation.ConstraintViolationException;
+import java.util.List;
 import java.util.Optional;
 
 import static com.epam.kindergartermenumaker.dao.ConstraintViolationExceptionMessage.NOT_NULL;
@@ -75,6 +76,70 @@ class RecipeRepositoryTest {
         assertThatThrownBy(() -> manager.persistAndFlush(recipe))
                 .isInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining(NOT_NULL.getMessage());
+    }
+
+    @Test
+    void shouldReturnTrueWhenRecipeExistsByName() {
+        Category dummy = Category.builder().name("Dummy").build();
+        manager.persistAndFlush(dummy);
+        Recipe recipe = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .description(FRIED_POTATOES_DESCRIPTION)
+                .category(dummy)
+                .build();
+        manager.persistAndFlush(recipe);
+
+        boolean exists = recipeRepository.existsByName(FRIED_POTATOES);
+
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenRecipeNotExistsByName() {
+        Category dummy = Category.builder().name("Dummy").build();
+        manager.persistAndFlush(dummy);
+        Recipe recipe = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .description(FRIED_POTATOES_DESCRIPTION)
+                .category(dummy)
+                .build();
+        manager.persistAndFlush(recipe);
+
+        boolean exists = recipeRepository.existsByName("qwe");
+
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    void shouldReturnRecipeByCategoryWhenPersisted() {
+        Category mainCourse = prepareCategory();
+        Recipe recipe = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .description(FRIED_POTATOES_DESCRIPTION)
+                .category(mainCourse)
+                .build();
+        manager.persistAndFlush(recipe);
+
+        List<Recipe> actual = recipeRepository.findByCategory(mainCourse);
+
+        assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void shouldReturnEmptyRecipeByCategoryWhenPersisted() {
+        Category mainCourse = prepareCategory();
+        Category dummy = Category.builder().name("Dummy").build();
+        manager.persistAndFlush(dummy);
+        Recipe recipe = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .description(FRIED_POTATOES_DESCRIPTION)
+                .category(mainCourse)
+                .build();
+        manager.persistAndFlush(recipe);
+
+        List<Recipe> actual = recipeRepository.findByCategory(dummy);
+
+        assertThat(actual).isEmpty();
     }
 
     private Category prepareCategory() {

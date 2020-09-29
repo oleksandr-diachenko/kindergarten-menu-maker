@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Setter
     private long id;
     @NotNull

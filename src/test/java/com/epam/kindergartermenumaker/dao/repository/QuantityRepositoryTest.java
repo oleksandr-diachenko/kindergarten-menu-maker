@@ -9,12 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
-import static com.epam.kindergartermenumaker.dao.ConstraintViolationExceptionMessage.GREATER_THEN_ZERO;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author : Oleksandr Diachenko
@@ -26,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class QuantityRepositoryTest {
 
     private static final int TWO = 2;
+    private static final int THREE = 3;
 
     @Autowired
     private TestEntityManager manager;
@@ -48,25 +46,56 @@ class QuantityRepositoryTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenQuantityNetIsZero() {
-        Quantity quantity = Quantity.builder()
-                .amountNet(0)
+    void shouldReturnTrueWhenQuantityExistsByNetAndGross() {
+        Quantity two = Quantity.builder()
+                .amountNet(TWO)
+                .amountGross(THREE)
                 .build();
+        manager.persistAndFlush(two);
 
-        assertThatThrownBy(() -> manager.persistAndFlush(quantity))
-                .isInstanceOf(ConstraintViolationException.class)
-                .hasMessageContaining(GREATER_THEN_ZERO.getMessage());
+        boolean exists = quantityRepository.existsByAmountNetAndAmountGross(TWO, THREE);
+
+        assertThat(exists).isTrue();
     }
 
     @Test
-    void shouldThrowExceptionWhenQuantityGrossIsZero() {
-        Quantity quantity = Quantity.builder()
+    void shouldReturnFalseWhenQuantityNotExistsByNetAndGross() {
+        Quantity two = Quantity.builder()
                 .amountNet(TWO)
-                .amountGross(0)
+                .amountGross(THREE)
                 .build();
+        manager.persistAndFlush(two);
 
-        assertThatThrownBy(() -> manager.persistAndFlush(quantity))
-                .isInstanceOf(ConstraintViolationException.class)
-                .hasMessageContaining(GREATER_THEN_ZERO.getMessage());
+        boolean exists = quantityRepository.existsByAmountNetAndAmountGross(-1, -2);
+
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    void shouldReturnQuantityByNetAndGrossWhenPersisted() {
+        Quantity two = Quantity.builder()
+                .amountNet(TWO)
+                .amountGross(THREE)
+                .build();
+        manager.persistAndFlush(two);
+
+        Optional<Quantity> actual = quantityRepository.findByAmountNetAndAmountGross(TWO, THREE);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getAmountNet()).isEqualTo(TWO);
+        assertThat(actual.get().getAmountGross()).isEqualTo(THREE);
+    }
+
+    @Test
+    void shouldReturnEmptyQuantityByNetAndGrossWhenPersisted() {
+        Quantity two = Quantity.builder()
+                .amountNet(TWO)
+                .amountGross(THREE)
+                .build();
+        manager.persistAndFlush(two);
+
+        Optional<Quantity> actual = quantityRepository.findByAmountNetAndAmountGross(-1, -2);
+
+        assertThat(actual).isEmpty();
     }
 }

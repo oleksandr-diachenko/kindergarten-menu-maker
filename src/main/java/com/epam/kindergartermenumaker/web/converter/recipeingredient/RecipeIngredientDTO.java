@@ -58,19 +58,22 @@ public class RecipeIngredientDTO {
     }
 
     private void calculateKindergartenEnergyValue() {
-        kindergartenEnergyValue = round(kindergartenSumCarbohydrate + kindergartenSumProtein + kindergartenSumFat, 2);
+        kindergartenEnergyValue = round(kindergartenSumCarbohydrate * CARBOHYDRATE_MULTIPLIER
+                + kindergartenSumProtein + PROTEIN_MULTIPLIER
+                + kindergartenSumFat * FAT_MULTIPLIER, 2);
     }
 
     private void calculateNurseryEnergyValue() {
-        nurseryEnergyValue = round(nurserySumCarbohydrate + nurserySumProtein + nurserySumFat, 2);
+        nurseryEnergyValue = round(nurserySumCarbohydrate * CARBOHYDRATE_MULTIPLIER
+                + nurserySumProtein * PROTEIN_MULTIPLIER
+                + nurserySumFat * FAT_MULTIPLIER, 2);
     }
 
     private void calculateKindergartenCarbohydrates() {
         Quantity quantity = recipeIngredient.getKindergartenQuantity();
         Ingredient ingredient = recipeIngredient.getIngredient();
         if (quantity != null && ingredient != null) {
-            kindergartenSumCarbohydrate = round(ingredient.getCarbohydrate() * quantity.getAmountNet()
-                    * CARBOHYDRATE_MULTIPLIER, 2);
+            kindergartenSumCarbohydrate = round(ingredient.getCarbohydrate() * quantity.getAmountNet(), 2);
         }
     }
 
@@ -78,8 +81,7 @@ public class RecipeIngredientDTO {
         Quantity quantity = recipeIngredient.getKindergartenQuantity();
         Ingredient ingredient = recipeIngredient.getIngredient();
         if (quantity != null && ingredient != null) {
-            kindergartenSumFat = round(ingredient.getFat() * quantity.getAmountNet()
-                    * FAT_MULTIPLIER, 2);
+            kindergartenSumFat = round(ingredient.getFat() * quantity.getAmountNet(), 2);
         }
     }
 
@@ -87,8 +89,7 @@ public class RecipeIngredientDTO {
         Quantity quantity = recipeIngredient.getKindergartenQuantity();
         Ingredient ingredient = recipeIngredient.getIngredient();
         if (quantity != null && ingredient != null) {
-            kindergartenSumProtein = round(ingredient.getProtein() * quantity.getAmountNet()
-                    * PROTEIN_MULTIPLIER, 2);
+            kindergartenSumProtein = round(ingredient.getProtein() * quantity.getAmountNet(), 2);
         }
     }
 
@@ -96,8 +97,7 @@ public class RecipeIngredientDTO {
         Quantity quantity = recipeIngredient.getNurseryQuantity();
         Ingredient ingredient = recipeIngredient.getIngredient();
         if (quantity != null && ingredient != null) {
-            nurserySumCarbohydrate = round(ingredient.getCarbohydrate() * quantity.getAmountNet()
-                    * CARBOHYDRATE_MULTIPLIER, 2);
+            nurserySumCarbohydrate = round(ingredient.getCarbohydrate() * quantity.getAmountNet(), 2);
         }
     }
 
@@ -105,8 +105,7 @@ public class RecipeIngredientDTO {
         Quantity quantity = recipeIngredient.getNurseryQuantity();
         Ingredient ingredient = recipeIngredient.getIngredient();
         if (quantity != null && ingredient != null) {
-            nurserySumFat = round(ingredient.getFat() * quantity.getAmountNet()
-                    * FAT_MULTIPLIER, 2);
+            nurserySumFat = round(ingredient.getFat() * quantity.getAmountNet(), 2);
         }
     }
 
@@ -114,8 +113,7 @@ public class RecipeIngredientDTO {
         Quantity quantity = recipeIngredient.getNurseryQuantity();
         Ingredient ingredient = recipeIngredient.getIngredient();
         if (quantity != null && ingredient != null) {
-            nurserySumProtein = round(ingredient.getProtein() * quantity.getAmountNet()
-                    * PROTEIN_MULTIPLIER, 2);
+            nurserySumProtein = round(ingredient.getProtein() * quantity.getAmountNet(), 2);
         }
     }
 }

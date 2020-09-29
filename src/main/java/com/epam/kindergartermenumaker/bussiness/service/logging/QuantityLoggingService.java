@@ -35,4 +35,19 @@ public class QuantityLoggingService implements QuantityService {
                 () -> log.debug(format("Measurement quantity with id %s not found", id)));
         return optional;
     }
+
+    @Override
+    public boolean existsByAmountNetAndAmountGross(double amountNet, double amountGross) {
+        boolean exists = quantityRepository.existsByAmountNetAndAmountGross(amountNet, amountGross);
+        log.debug("Is quantity with net {} and gross {} exists? {}", amountNet, amountGross, exists);
+        return exists;
+    }
+
+    @Override
+    public Optional<Quantity> findByAmountNetAndAmountGross(double amountNet, double amountGross) {
+        Optional<Quantity> optional = quantityRepository.findByAmountNetAndAmountGross(amountNet, amountGross);
+        optional.ifPresentOrElse(quantity -> log.debug(quantity + " was retrieved"),
+                () -> log.debug(format("Quantity with net %s and gross %s not found", amountNet, amountGross)));
+        return optional;
+    }
 }

@@ -13,4 +13,8 @@ public interface QuantityService {
     Quantity save(Quantity quantity);
 
     Optional<Quantity> findById(long id);
+
+    boolean existsByAmountNetAndAmountGross(double amountNet, double amountGross);
+
+    Optional<Quantity> findByAmountNetAndAmountGross(double amountNet, double amountGross);
 }

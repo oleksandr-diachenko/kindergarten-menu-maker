@@ -61,4 +61,46 @@ class QuantityLoggingServiceTest {
 
         assertThat(actual).isEmpty();
     }
+
+    @Test
+    void shouldReturnTrueWhenExistsByNetAndGross() {
+        when(repository.existsByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(true);
+
+        boolean actual = service.existsByAmountNetAndAmountGross(FIVE, TEN);
+
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenNotExistsByNetAndGross() {
+        when(repository.existsByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(false);
+
+        boolean actual = service.existsByAmountNetAndAmountGross(FIVE, TEN);
+
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void shouldReturnQuantityWhenFindByNetAndGrossExist() {
+        Quantity quantity = Quantity.builder()
+                .amountNet(FIVE)
+                .amountGross(TEN)
+                .build();
+        when(repository.findByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(Optional.ofNullable(quantity));
+
+        Optional<Quantity> actual = service.findByAmountNetAndAmountGross(FIVE, TEN);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getAmountNet()).isEqualTo(FIVE);
+        assertThat(actual.get().getAmountGross()).isEqualTo(TEN);
+    }
+
+    @Test
+    void shouldReturnEmptyQuantityWhenFindByNetAndGrossNotExist() {
+        when(repository.findByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(Optional.empty());
+
+        Optional<Quantity> actual = service.findByAmountNetAndAmountGross(FIVE, TEN);
+
+        assertThat(actual).isEmpty();
+    }
 }

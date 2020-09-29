@@ -35,4 +35,19 @@ public class MeasurementLoggingService implements MeasurementService {
                 () -> log.debug(format("Measurement unit with id %s not found", id)));
         return optional;
     }
+
+    @Override
+    public boolean existsByDescription(String description) {
+        boolean exists = measurementRepository.existsByDescription(description);
+        log.debug("Is measurement with description {} exists? {}", description, exists);
+        return exists;
+    }
+
+    @Override
+    public Optional<Measurement> findByDescription(String description) {
+        Optional<Measurement> optional = measurementRepository.findByDescription(description);
+        optional.ifPresentOrElse(measurement -> log.debug(measurement + " was retrieved"),
+                () -> log.debug(format("Measurement with description %s not found", description)));
+        return optional;
+    }
 }

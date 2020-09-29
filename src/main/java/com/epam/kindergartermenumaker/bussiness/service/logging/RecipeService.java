@@ -19,4 +19,8 @@ public interface RecipeService {
     List<Recipe> findAll();
 
     List<Recipe> findByCategory(Category category);
+
+    boolean existsByName(String name);
+
+    Optional<Recipe> findByName(String name);
 }

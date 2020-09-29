@@ -33,20 +33,20 @@ class QuantityLoggingServiceTest {
     @Test
     void shouldCallSaveRepositoryWhenSaveTriggered() {
         Quantity ten = Quantity.builder()
-                .amount(TEN)
+                .amountNet(TEN)
                 .build();
         when(repository.save(ten)).thenReturn(ten);
 
         Quantity actual = service.save(ten);
 
-        assertThat(actual.getAmount()).isEqualTo(TEN);
+        assertThat(actual.getAmountNet()).isEqualTo(TEN);
         verify(repository).save(ten);
     }
 
     @Test
     void shouldReturnNonEmptyWhenFindByIdTriggered() {
         Quantity ten = Quantity.builder()
-                .amount(TEN)
+                .amountNet(TEN)
                 .build();
         when(repository.findById(FIVE)).thenReturn(Optional.of(ten));
 

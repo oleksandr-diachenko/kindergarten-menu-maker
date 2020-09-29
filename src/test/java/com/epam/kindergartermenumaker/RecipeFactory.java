@@ -93,7 +93,7 @@ public class RecipeFactory {
         return RecipeIngredient.builder()
                 .recipe(recipe)
                 .ingredient(ingredient)
-                .quantity(quantity)
+                .kindergartenQuantity(quantity)
                 .measurement(measurement)
                 .build();
 
@@ -104,7 +104,7 @@ public class RecipeFactory {
     }
 
     private static Quantity prepareQuantity(int amount) {
-        return Quantity.builder().amount(amount).build();
+        return Quantity.builder().amountNet(amount).build();
     }
 
     private static Ingredient prepareIngredient(String name) {

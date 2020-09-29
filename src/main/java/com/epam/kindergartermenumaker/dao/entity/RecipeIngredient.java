@@ -31,7 +31,10 @@ public class RecipeIngredient {
     private Measurement measurement;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private Quantity quantity;
+    private Quantity nurseryQuantity;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Quantity kindergartenQuantity;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Ingredient ingredient;

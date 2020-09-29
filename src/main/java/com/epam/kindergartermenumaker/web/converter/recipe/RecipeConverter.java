@@ -1,8 +1,8 @@
 package com.epam.kindergartermenumaker.web.converter.recipe;
 
-import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeIngredientService;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.converter.Converter;
+import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientConverterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RecipeConverter implements Converter<Recipe, RecipeDTO> {
 
-    private final RecipeIngredientService recipeIngredientService;
+    private final RecipeIngredientConverterService recipeIngredientConverterService;
 
     @Override
     public RecipeDTO convert(Recipe recipe) {
         return RecipeDTO.builder()
                 .recipe(recipe)
-                .ingredients(recipeIngredientService.findByRecipe(recipe))
+                .ingredients(recipeIngredientConverterService.findByRecipe(recipe))
                 .build();
     }
 }

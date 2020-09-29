@@ -1,7 +1,7 @@
 package com.epam.kindergartermenumaker.web.converter.recipe;
 
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
-import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
+import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientDTO;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,5 +20,5 @@ import java.util.List;
 public class RecipeDTO {
 
     private final Recipe recipe;
-    private final List<RecipeIngredient> ingredients;
+    private final List<RecipeIngredientDTO> ingredients;
 }

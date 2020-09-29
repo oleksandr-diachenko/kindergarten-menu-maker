@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:include="fragments/head :: head"></head>
+<head th:include="fragments/head :: head">
+    <link th:href="@{/css/recipe.css}" rel="stylesheet"/>
+</head>
 <body>
 <nav th:replace="fragments/header :: header"></nav>
 <div class="container">
@@ -9,7 +11,7 @@
             <li class="nav-item" th:each="category,iter : ${categories}">
                 <a class="nav-link" th:classappend="${iter.first} ? 'show active'" data-toggle="tab"
                    th:href="@{'#category' + ${category.category.id}}">
-                    <label th:text="${category.category.name}"></label>
+                    <label class="rotate-l-90" th:text="${category.category.name}"></label>
                 </a>
             </li>
         </ul>

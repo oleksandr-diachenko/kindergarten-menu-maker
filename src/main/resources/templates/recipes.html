@@ -29,7 +29,7 @@
                          th:attr="aria-labelledby='heading' + ${iter.index}">
                         <div class="card-body">
                             <div th:include="fragments/recipe-table :: recipe-table" th:with="recipe=${recipe}"></div>
-                            <span class="font-italic"> Технология изготовления:</span>
+                            <span class="font-italic"> Технологія приготовання страви:</span>
                             <p class="pl-4" th:text="${recipe.recipe.description}"></p>
                         </div>
                     </div>

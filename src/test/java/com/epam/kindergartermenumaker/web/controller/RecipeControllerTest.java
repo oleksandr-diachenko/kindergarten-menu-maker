@@ -52,7 +52,7 @@ class RecipeControllerTest {
         List<RecipeDTO> recipeDTOs = List.of(friedPotatoesDTO);
         CategoryDTO mainCourseDTO = buildCategoryDTO(mainCourse, recipeDTOs);
         List<CategoryDTO> categoriesDTOs = List.of(mainCourseDTO);
-        when(service.getAllCategories()).thenReturn(categoriesDTOs);
+        when(service.getAllNonEmptyCategories()).thenReturn(categoriesDTOs);
 
         String page = controller.getAllCategories(model);
 

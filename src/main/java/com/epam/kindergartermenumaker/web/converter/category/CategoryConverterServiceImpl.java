@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+
 /**
  * @author : Oleksandr Diachenko
  * @since : 9/25/2020
@@ -21,9 +23,10 @@ public class CategoryConverterServiceImpl implements CategoryConverterService {
     private final Converter<Category, CategoryDTO> categoryToDtoConverter;
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
+    public List<CategoryDTO> getAllNonEmptyCategories() {
         return categoryService.findAll().stream()
                 .map(categoryToDtoConverter::convert)
+                .filter(categoryDTO -> isNotEmpty(categoryDTO.getRecipes()))
                 .collect(Collectors.toList());
     }
 }

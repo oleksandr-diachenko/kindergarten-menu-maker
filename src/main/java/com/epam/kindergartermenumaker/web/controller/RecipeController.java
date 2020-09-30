@@ -27,7 +27,7 @@ public class RecipeController {
 
     @GetMapping
     public String getAllCategories(Model model) {
-        List<CategoryDTO> categoryDTOS = categoryConverterService.getAllCategories();
+        List<CategoryDTO> categoryDTOS = categoryConverterService.getAllNonEmptyCategories();
         model.addAttribute("categories", categoryDTOS);
         return "recipes";
     }

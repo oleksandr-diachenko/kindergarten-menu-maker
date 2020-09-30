@@ -3,6 +3,7 @@ package com.epam.kindergartermenumaker.web.converter.category;
 import com.epam.kindergartermenumaker.bussiness.service.logging.CategoryService;
 import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.web.converter.Converter;
+import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,11 +36,24 @@ class CategoryConverterServiceImplTest {
     void shouldReturnListOfCategoryDTOs() {
         Category mainSource = Category.builder().name(MAIN_SOURCE).build();
         when(categoryService.findAll()).thenReturn(List.of(mainSource));
+        RecipeDTO recipe = RecipeDTO.builder().build();
+        CategoryDTO categoryDTO = CategoryDTO.builder().category(mainSource).recipes(List.of(recipe)).build();
+        when(categoryToCategoryDTOConverter.convert(mainSource)).thenReturn(categoryDTO);
+
+        List<CategoryDTO> categoryDTOS = categoryConverterService.getAllNonEmptyCategories();
+
+        assertThat(categoryDTOS).containsExactly(categoryDTO);
+    }
+
+    @Test
+    void shouldNotReturnCategoryWhenRecipesIsEmpty() {
+        Category mainSource = Category.builder().name(MAIN_SOURCE).build();
+        when(categoryService.findAll()).thenReturn(List.of(mainSource));
         CategoryDTO categoryDTO = CategoryDTO.builder().category(mainSource).build();
         when(categoryToCategoryDTOConverter.convert(mainSource)).thenReturn(categoryDTO);
 
-        List<CategoryDTO> categoryDTOS = categoryConverterService.getAllCategories();
+        List<CategoryDTO> categoryDTOS = categoryConverterService.getAllNonEmptyCategories();
 
-        assertThat(categoryDTOS).containsExactly(categoryDTO);
+        assertThat(categoryDTOS).isEmpty();
     }
 }

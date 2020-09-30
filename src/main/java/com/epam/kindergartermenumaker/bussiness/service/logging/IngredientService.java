@@ -13,4 +13,8 @@ public interface IngredientService {
     Ingredient save(Ingredient ingredient);
 
     Optional<Ingredient> findById(long id);
+
+    boolean existsByName(String name);
+
+    Optional<Ingredient> findByName(String name);
 }

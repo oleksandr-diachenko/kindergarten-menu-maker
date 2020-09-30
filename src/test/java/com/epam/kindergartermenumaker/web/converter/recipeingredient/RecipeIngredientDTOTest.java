@@ -14,19 +14,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RecipeIngredientDTOTest {
 
     @Test
-    void shouldCalculateEnergyValueForRecipeIngredient() {
+    void shouldCalculateMineralsForRecipeIngredient() {
         Ingredient ingredient = Ingredient.builder().carbohydrate(2).protein(3).fat(4).build();
         Quantity nurseryQuantity = Quantity.builder().amountNet(5).build();
         Quantity kindergartenQuantity = Quantity.builder().amountNet(7).build();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, nurseryQuantity, kindergartenQuantity);
 
-        assertThat(recipeIngredientDTO.getNurserySumFat()).isEqualTo(4 * 5 * 9);
-        assertThat(recipeIngredientDTO.getNurserySumProtein()).isEqualTo(3 * 5 * 4);
-        assertThat(recipeIngredientDTO.getNurserySumCarbohydrate()).isEqualTo(2 * 5 * 4);
-        assertThat(recipeIngredientDTO.getKindergartenSumFat()).isEqualTo(4 * 7 * 9);
-        assertThat(recipeIngredientDTO.getKindergartenSumProtein()).isEqualTo(3 * 7 * 4);
-        assertThat(recipeIngredientDTO.getKindergartenSumCarbohydrate()).isEqualTo(2 * 7 * 4);
+        assertThat(recipeIngredientDTO.getNurserySumFat()).isEqualTo(4 * 5);
+        assertThat(recipeIngredientDTO.getNurserySumProtein()).isEqualTo(3 * 5);
+        assertThat(recipeIngredientDTO.getNurserySumCarbohydrate()).isEqualTo(2 * 5);
+        assertThat(recipeIngredientDTO.getKindergartenSumFat()).isEqualTo(4 * 7);
+        assertThat(recipeIngredientDTO.getKindergartenSumProtein()).isEqualTo(3 * 7);
+        assertThat(recipeIngredientDTO.getKindergartenSumCarbohydrate()).isEqualTo(2 * 7);
+
+        assertThat(recipeIngredientDTO.getNurseryEnergyValue()).isEqualTo(280);
+        assertThat(recipeIngredientDTO.getKindergartenEnergyValue()).isEqualTo(333);
     }
 
     @Test

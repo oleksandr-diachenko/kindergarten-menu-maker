@@ -13,4 +13,8 @@ public interface MeasurementService {
     Measurement save(Measurement measurement);
 
     Optional<Measurement> findById(long id);
+
+    boolean existsByDescription(String description);
+
+    Optional<Measurement> findByDescription(String description);
 }

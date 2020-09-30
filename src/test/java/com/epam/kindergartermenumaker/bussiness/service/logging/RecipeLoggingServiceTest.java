@@ -87,4 +87,44 @@ class RecipeLoggingServiceTest {
 
         assertThat(actual).containsExactly(friedPotatoes);
     }
+
+    @Test
+    void shouldReturnTrueWhenExistsByName() {
+        when(repository.existsByName(FRIED_POTATOES)).thenReturn(true);
+
+        boolean actual = service.existsByName(FRIED_POTATOES);
+
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenNotExistsByName() {
+        when(repository.existsByName(FRIED_POTATOES)).thenReturn(false);
+
+        boolean actual = service.existsByName(FRIED_POTATOES);
+
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void shouldReturnRecipeWhenFindByNameExist() {
+        Recipe friedPotatoes = Recipe.builder()
+                .name(FRIED_POTATOES)
+                .build();
+        when(repository.findByName(FRIED_POTATOES)).thenReturn(Optional.ofNullable(friedPotatoes));
+
+        Optional<Recipe> actual = service.findByName(FRIED_POTATOES);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getName()).isEqualTo(FRIED_POTATOES);
+    }
+
+    @Test
+    void shouldReturnEmptyRecipeWhenFindByNameNotExist() {
+        when(repository.findByName(FRIED_POTATOES)).thenReturn(Optional.empty());
+
+        Optional<Recipe> actual = service.findByName(FRIED_POTATOES);
+
+        assertThat(actual).isEmpty();
+    }
 }

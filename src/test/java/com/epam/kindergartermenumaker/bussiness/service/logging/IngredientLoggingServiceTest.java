@@ -61,4 +61,45 @@ class IngredientLoggingServiceTest {
 
         assertThat(actual).isEmpty();
     }
+
+    @Test
+    void shouldReturnTrueWhenExistsByName() {
+        when(repository.existsByName(SALT)).thenReturn(true);
+
+        boolean actual = service.existsByName(SALT);
+
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenNotExistsByName() {
+        when(repository.existsByName(SALT)).thenReturn(false);
+
+        boolean actual = service.existsByName(SALT);
+
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void shouldReturnIngredientWhenFindByNameExist() {
+        Ingredient salt = Ingredient.builder()
+                .id(TEN)
+                .name(SALT)
+                .build();
+        when(repository.findByName(SALT)).thenReturn(Optional.ofNullable(salt));
+
+        Optional<Ingredient> actual = service.findByName(SALT);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getName()).isEqualTo(SALT);
+    }
+
+    @Test
+    void shouldReturnEmptyIngredientWhenFindByNameNotExist() {
+        when(repository.findByName(SALT)).thenReturn(Optional.empty());
+
+        Optional<Ingredient> actual = service.findByName(SALT);
+
+        assertThat(actual).isEmpty();
+    }
 }

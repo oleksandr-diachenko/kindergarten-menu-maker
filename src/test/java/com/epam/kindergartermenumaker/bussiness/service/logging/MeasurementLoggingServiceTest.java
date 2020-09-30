@@ -61,4 +61,44 @@ class MeasurementLoggingServiceTest {
 
         assertThat(actual).isEmpty();
     }
+
+    @Test
+    void shouldReturnTrueWhenExistsByName() {
+        when(repository.existsByDescription(GRAM)).thenReturn(true);
+
+        boolean actual = service.existsByDescription(GRAM);
+
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenNotExistsByName() {
+        when(repository.existsByDescription(GRAM)).thenReturn(false);
+
+        boolean actual = service.existsByDescription(GRAM);
+
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void shouldReturnMeasurementWhenFindByNameExist() {
+        Measurement gram = Measurement.builder()
+                .description(GRAM)
+                .build();
+        when(repository.findByDescription(GRAM)).thenReturn(Optional.ofNullable(gram));
+
+        Optional<Measurement> actual = service.findByDescription(GRAM);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getDescription()).isEqualTo(GRAM);
+    }
+
+    @Test
+    void shouldReturnEmptyMeasurementWhenFindByNameNotExist() {
+        when(repository.findByDescription(GRAM)).thenReturn(Optional.empty());
+
+        Optional<Measurement> actual = service.findByDescription(GRAM);
+
+        assertThat(actual).isEmpty();
+    }
 }

@@ -8,6 +8,7 @@ import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -34,5 +35,20 @@ public class CategoryLoggingService implements CategoryService {
         List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
         log.debug(format("Returned all categories: %s", categories));
         return categories;
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        boolean exists = categoryRepository.existsByName(name);
+        log.debug("Is category with name {} exists? {}", name, exists);
+        return exists;
+    }
+
+    @Override
+    public Optional<Category> findByName(String name) {
+        Optional<Category> optional = categoryRepository.findByName(name);
+        optional.ifPresentOrElse(category -> log.debug(category + " was retrieved"),
+                () -> log.debug(format("Category with name %s not found", name)));
+        return optional;
     }
 }

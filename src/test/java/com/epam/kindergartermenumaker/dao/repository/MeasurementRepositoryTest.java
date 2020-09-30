@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MeasurementRepositoryTest {
 
     private static final String GRAM = "Gram";
+    private static final String NON_EXISTING_MEASUREMENT = "qwe";
 
     @Autowired
     private TestEntityManager manager;
@@ -54,5 +55,54 @@ class MeasurementRepositoryTest {
         assertThatThrownBy(() -> manager.persistAndFlush(measurement))
                 .isInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining(NOT_NULL.getMessage());
+    }
+
+    @Test
+    void shouldReturnTrueWhenMeasurementExistsByDescription() {
+        Measurement gram = Measurement.builder()
+                .description(GRAM)
+                .build();
+        manager.persistAndFlush(gram);
+
+        boolean exists = measurementRepository.existsByDescription(GRAM);
+
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenMeasurementNotExistsByDescription() {
+        Measurement gram = Measurement.builder()
+                .description(GRAM)
+                .build();
+        manager.persistAndFlush(gram);
+
+        boolean exists = measurementRepository.existsByDescription(NON_EXISTING_MEASUREMENT);
+
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    void shouldReturnMeasurementByNameWhenPersisted() {
+        Measurement gram = Measurement.builder()
+                .description(GRAM)
+                .build();
+        manager.persistAndFlush(gram);
+
+        Optional<Measurement> actual = measurementRepository.findByDescription(GRAM);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getDescription()).isEqualTo(GRAM);
+    }
+
+    @Test
+    void shouldReturnEmptyMeasurementByNameWhenPersisted() {
+        Measurement gram = Measurement.builder()
+                .description(GRAM)
+                .build();
+        manager.persistAndFlush(gram);
+
+        Optional<Measurement> actual = measurementRepository.findByDescription(NON_EXISTING_MEASUREMENT);
+
+        assertThat(actual).isEmpty();
     }
 }

@@ -35,4 +35,19 @@ public class IngredientLoggingService implements IngredientService {
                 () -> log.debug(format("Ingredient with id %s not found", id)));
         return optional;
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        boolean exists = ingredientRepository.existsByName(name);
+        log.debug("Is ingredient with name {} exists? {}", name, exists);
+        return exists;
+    }
+
+    @Override
+    public Optional<Ingredient> findByName(String name) {
+        Optional<Ingredient> optional = ingredientRepository.findByName(name);
+        optional.ifPresentOrElse(ingredient -> log.debug(ingredient + " was retrieved"),
+                () -> log.debug(format("Ingredient with name %s not found", name)));
+        return optional;
+    }
 }

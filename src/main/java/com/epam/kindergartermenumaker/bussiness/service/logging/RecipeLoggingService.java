@@ -52,4 +52,19 @@ public class RecipeLoggingService implements RecipeService {
         log.debug(format("For category: %s returned all recipes: %s", category, recipes));
         return recipes;
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        boolean exists = recipeRepository.existsByName(name);
+        log.debug("Is recipe with name {} exists? {}", name, exists);
+        return exists;
+    }
+
+    @Override
+    public Optional<Recipe> findByName(String name) {
+        Optional<Recipe> optional = recipeRepository.findByName(name);
+        optional.ifPresentOrElse(recipe -> log.debug(recipe + " was retrieved"),
+                () -> log.debug(format("Recipe with name %s not found", name)));
+        return optional;
+    }
 }

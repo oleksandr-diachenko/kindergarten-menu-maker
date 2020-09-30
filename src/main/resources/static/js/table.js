@@ -1,16 +1,11 @@
-$(document).ready(function() {
-    $('table thead th').each(function(i) {
-        calculateColumn(i);
+$(document).ready(function () {
+    let ids = $('.table').map((i, el) => el.getAttribute('id')).get();
+
+    $.each(ids, function (index, value) {
+        $('#' + value).tableTotal({
+            totalRow: true,
+            totalCol: false,
+            bold: false
+        });
     });
 });
-
-function calculateColumn(index) {
-    var total = 0;
-    $('table tr').each(function() {
-        var value = parseFloat($('td', this).eq(index).text());
-        if (!isNaN(value)) {
-            total += value;
-        }
-    });
-    $('table tfoot td').eq(index).text(total.toFixed(2));
-}

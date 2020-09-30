@@ -8,27 +8,28 @@
 <div class="container">
     <div class="mt-5">
         <ul class="nav nav-tabs">
-            <li class="nav-item" th:each="category,iter : ${categories}">
-                <a class="nav-link" th:classappend="${iter.first} ? 'show active'" data-toggle="tab"
+            <li class="nav-item" th:each="category, categoryIterator : ${categories}">
+                <a class="nav-link" th:classappend="${categoryIterator.first} ? 'show active'" data-toggle="tab"
                    th:href="@{'#category' + ${category.category.id}}">
                     <label class="rotate-l-90" th:text="${category.category.name}"></label>
                 </a>
             </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane fade" th:classappend="${iter.first} ? 'show active'"
-                 th:id="category + ${category.category.id}" th:each="category,iter : ${categories}">
+            <div class="tab-pane fade" th:classappend="${categoryIterator.first} ? 'show active'"
+                 th:id="category + ${category.category.id}" th:each="category, categoryIterator : ${categories}">
                 <div class="card" th:each="recipe : ${category.recipes}">
                     <h5 class="mb-0">
                         <button th:text="${recipe.recipe.name}" class="btn btn-link"
                                 data-toggle="collapse"
                                 aria-expanded="true"
-                                th:attr="aria-controls='collapse' + ${iter.index}, data-target='#collapse' + ${iter.index}">
+                                th:attr="aria-controls='collapse' + ${recipe.recipe.id},
+                                data-target='#collapse' + ${recipe.recipe.id}">
                         </button>
                     </h5>
 
-                    <div th:id="collapse + ${iter.index}" class="collapse"
-                         th:attr="aria-labelledby='heading' + ${iter.index}">
+                    <div th:id="collapse + ${recipe.recipe.id}" class="collapse"
+                         th:attr="aria-labelledby='collapse' + ${recipe.recipe.id}">
                         <div class="card-body">
                             <div th:include="fragments/recipe-table :: recipe-table" th:with="recipe=${recipe}"></div>
                             <span class="font-italic"> Технологія приготовання страви:</span>

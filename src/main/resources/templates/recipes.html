@@ -3,8 +3,8 @@
 <head th:include="fragments/head :: head">
     <link th:href="@{/css/recipe.css}" rel="stylesheet"/>
 </head>
-    <script type="text/javascript" th:src="@{/js/table.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.tableTotal.js}"></script>
+<script type="text/javascript" th:src="@{/js/table.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.tableTotal.js}"></script>
 <body>
 <nav th:replace="fragments/header :: header"></nav>
 <div class="container">
@@ -40,6 +40,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-right fixed-bottom">
+            <a class="text-muted font-weight-bold" th:href="@{#}">
+                <em class="far fa-arrow-alt-circle-up" style=" font-size: 35px;color: lightgray;"></em>
+            </a>
         </div>
     </div>
 </div>

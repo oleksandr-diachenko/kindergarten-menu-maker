@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  **/
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Tag("spring")
+@Tag("integration")
 class RecipeIngredientRepositoryTest {
 
     private static final String POTATO = "Potato";

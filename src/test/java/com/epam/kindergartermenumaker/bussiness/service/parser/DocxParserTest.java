@@ -52,6 +52,16 @@ class DocxParserTest {
         verifyRecipeForm(recipeForm);
     }
 
+    @Test
+    void shouldParseDocxDocumentWithEmptyStrings() throws IOException {
+        InputStream inputStream = new ClassPathResource("/doc/lemon-tea.docx").getInputStream();
+
+        RecipeForm recipeForm = parser.parse(inputStream);
+
+        assertThat(recipeForm.getRecipeName()).isEqualTo("Чай з лимоном");
+        assertThat(recipeForm.getRecipeDescription()).contains("Чай-заварку готують");
+    }
+
     private void verifyRecipeForm(RecipeForm recipeForm) {
         assertThat(recipeForm.getCategoryName()).isNull();
         assertThat(recipeForm.getRecipeName()).isEqualTo(CASSEROLE);

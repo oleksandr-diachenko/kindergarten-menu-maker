@@ -62,8 +62,17 @@ public class DocxParser implements Parser<RecipeForm> {
     private List<IBodyElement> getNonEmptyElements(XWPFWordExtractor extractor) {
         List<IBodyElement> elements = ((XWPFDocument) extractor.getDocument()).getBodyElements();
         return elements.stream()
-                .filter(element -> element instanceof XWPFTable || element instanceof XWPFParagraph && !((XWPFParagraph) element).getIRuns().isEmpty())
+                .filter(element -> isTable(element) || nonEmptyParagraph(element))
                 .collect(Collectors.toList());
+    }
+
+    private boolean isTable(IBodyElement element) {
+        return element instanceof XWPFTable;
+    }
+
+    private boolean nonEmptyParagraph(IBodyElement element) {
+        return element instanceof XWPFParagraph
+                && !((XWPFParagraph) element).getText().isEmpty();
     }
 
     private List<IngredientForm> getIngredientForms(List<XWPFTableRow> rows) {

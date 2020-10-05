@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:include="fragments/head :: head"></head>
+<head th:include="fragments/head :: head">
+</head>
+<script type="text/javascript" th:src="@{/js/formValidation.js}"></script>
 <body>
 <nav th:replace="fragments/header :: header"></nav>
 <div class="container">
@@ -18,7 +20,7 @@
             <form action="#" th:action="@{/recipes/load}" enctype="multipart/form-data" method="post">
                 <div class="form-group">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile" name="file">
+                        <input type="file" class="custom-file-input" id="customFile" name="file" required>
                         <label class="custom-file-label" for="customFile">Виберіть файл</label>
                     </div>
                 </div>
@@ -28,18 +30,25 @@
         </div>
     </div>
     <div class="row">
-        <form class="col-12" action="#" th:action="@{/recipes}" th:object="${recipeForm}" method="post">
+        <form class="col-12 needs-validation" action="#" th:action="@{/recipes}" th:object="${recipeForm}"
+              method="post" novalidate>
 
             <div class="form-group">
                 <label for="categoryName">Назва категорії</label>
                 <input type="text" id="categoryName" class="form-control" th:field="*{categoryName}"
-                       placeholder="Введіть назву категорії"/>
+                       placeholder="Введіть назву категорії" required/>
+                <div class="invalid-feedback">
+                    Введіть назву категорії.
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="recipeName">Назва рецепту</label>
                 <input type="text" id="recipeName" class="form-control" th:field="*{recipeName}"
-                       placeholder="Введіть назву рецепту"/>
+                       placeholder="Введіть назву рецепту" required/>
+                <div class="invalid-feedback">
+                    Введіть назву рецепту.
+                </div>
             </div>
 
             <table class="table table-bordered">
@@ -48,7 +57,8 @@
                 <tr>
                     <th class="text-center align-middle" scope="col" rowspan="3">Продукти</th>
                     <th class="text-center" scope="col" colspan="4">Маса, <span class="font-italic"> г</span></th>
-                <th class="text-center" scope="col" colspan="6">Хімічний склад, <span class="font-italic"> г</span></th>
+                    <th class="text-center" scope="col" colspan="6">Хімічний склад, <span class="font-italic"> г</span>
+                    </th>
                 </tr>
                 <tr>
                     <th class="text-center" scope="col" colspan="2">брутто</th>
@@ -70,49 +80,73 @@
                     <td>
                         <input type="text" th:id="'ingredientName' + ${stat.index}" class="form-control"
                                th:name="|ingredients[${stat.index}].ingredientName|"
-                               th:value="${ingredient.ingredientName}">
+                               th:value="${ingredient.ingredientName}" required>
+                        <div class="invalid-feedback">
+                            Введіть назву інгредієнту.
+                        </div>
                     </td>
                     <td>
                         <input type="number" step="0.01" th:id="'ingredientNurseryGrossAmount' + ${stat.index}"
                                class="form-control"
                                th:name="|ingredients[${stat.index}].nurseryGrossAmount|"
-                               th:value="${ingredient.nurseryGrossAmount}"/>
+                               th:value="${ingredient.nurseryGrossAmount}" required/>
+                        <div class="invalid-feedback">
+                            Введіть брутто для ясель.
+                        </div>
                     </td>
                     <td>
                         <input type="number" step="0.01" th:id="'ingredientKindergartenGrossAmount' + ${stat.index}"
                                class="form-control"
                                th:name="|ingredients[${stat.index}].kindergartenGrossAmount|"
-                               th:value="${ingredient.kindergartenGrossAmount}"/>
+                               th:value="${ingredient.kindergartenGrossAmount}" required/>
+                        <div class="invalid-feedback">
+                            Введіть брутто для садка.
+                        </div>
                     </td>
                     <td>
                         <input type="number" step="0.01" th:id="'ingredientNurseryNetAmount' + ${stat.index}"
                                class="form-control"
                                th:name="|ingredients[${stat.index}].nurseryNetAmount|"
-                               th:value="${ingredient.nurseryNetAmount}"/>
+                               th:value="${ingredient.nurseryNetAmount}" required/>
+                        <div class="invalid-feedback">
+                            Введіть нетто для ясель.
+                        </div>
                     </td>
                     <td>
                         <input type="number" step="0.01" th:id="'ingredientKindergartenNetAmount' + ${stat.index}"
                                class="form-control"
                                th:name="|ingredients[${stat.index}].kindergartenNetAmount|"
-                               th:value="${ingredient.kindergartenNetAmount}"/>
+                               th:value="${ingredient.kindergartenNetAmount}" required/>
+                        <div class="invalid-feedback">
+                            Введіть нетто для садка.
+                        </div>
                     </td>
                     <td>
                         <input type="number" step="0.01" th:id="'ingredientProtein' + ${stat.index}"
                                class="form-control"
                                th:name="|ingredients[${stat.index}].protein|"
-                               th:value="${ingredient.protein}"/>
+                               th:value="${ingredient.protein}" required/>
+                        <div class="invalid-feedback">
+                            Введіть кількість протеїну.
+                        </div>
                     </td>
                     <td>
                         <input type="number" step="0.01" th:id="'ingredientFat' + ${stat.index}"
                                class="form-control"
                                th:name="|ingredients[${stat.index}].fat|"
-                               th:value="${ingredient.fat}"/>
+                               th:value="${ingredient.fat}" required/>
+                        <div class="invalid-feedback">
+                            Введіть кількість жирів.
+                        </div>
                     </td>
                     <td>
                         <input type="number" step="0.01" th:id="'ingredientCarbohydrate' + ${stat.index}"
                                class="form-control"
                                th:name="|ingredients[${stat.index}].carbohydrate|"
-                               th:value="${ingredient.carbohydrate}"/>
+                               th:value="${ingredient.carbohydrate}" required/>
+                        <div class="invalid-feedback">
+                            Введіть кількість вуглеводів.
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -121,7 +155,10 @@
             <div class="form-group">
                 <label for="recipeDescription">Технологія приготування</label>
                 <textarea type="text" id="recipeDescription" class="form-control" th:field="*{recipeDescription}"
-                          placeholder="Введіть опис технології приготування страви"></textarea>
+                          placeholder="Введіть опис технології приготування страви" required></textarea>
+                <div class="invalid-feedback">
+                    Введіть технологію приготування страви.
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">Зберегти</button>

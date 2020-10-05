@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.web.controller;
 
+import com.epam.kindergartermenumaker.bussiness.service.parser.Parser;
 import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
@@ -16,7 +17,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +46,12 @@ class RecipeControllerTest {
     private Model model;
     @Mock
     private RecipeServiceAdapter recipeServiceAdapter;
+    @Mock
+    private MultipartFile file;
+    @Mock
+    private Parser<RecipeForm> parser;
+    @Mock
+    private InputStream inputStream;
 
     @Test
     void shouldSetRecipeDTOsAndReturnRecipesPage() {
@@ -64,21 +74,34 @@ class RecipeControllerTest {
     void shouldSaveRecipeFormAndRedirectToRecipesPage() {
         RecipeForm recipeForm = new RecipeForm();
 
-        String page = controller.createRecipe(recipeForm);
+        String page = controller.updateRecipe(recipeForm);
 
         assertThat(page).isEqualTo("redirect:/recipes");
         verify(recipeServiceAdapter).save(recipeForm);
     }
 
     @Test
-    void shouldSetRecipeFormToModelAndReturnCreateRecipePage() {
+    void shouldSetRecipeFormToModelAndReturnUpdateRecipePage() {
         ArgumentCaptor<RecipeForm> captor = ArgumentCaptor.forClass(RecipeForm.class);
 
-        String page = controller.getCreateRecipeForm(model, 2);
+        String page = controller.getUpdateRecipeForm(model, 2);
 
         verify(model).addAttribute(eq("recipeForm"), captor.capture());
         assertThat(captor.getValue().getIngredients()).hasSize(2);
-        assertThat(page).isEqualTo("create-recipe");
+        assertThat(page).isEqualTo("update-recipe");
+    }
+
+    @Test
+    void shouldSetRecipeFormAndReturnUpdateRecipePageWhenFileUploaded() throws IOException {
+        when(file.getInputStream()).thenReturn(inputStream);
+        RecipeForm recipeForm = new RecipeForm();
+        when(parser.parse(inputStream)).thenReturn(recipeForm);
+
+        String page = controller.loadRecipe(model, file);
+
+        verify(parser).parse(inputStream);
+        verify(model).addAttribute("recipeForm", recipeForm);
+        assertThat(page).isEqualTo("update-recipe");
     }
 
     private CategoryDTO buildCategoryDTO(Category category, List<RecipeDTO> recipeDTOS) {

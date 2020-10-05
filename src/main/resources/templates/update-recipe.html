@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="fragments/head :: head"></head>
+<body>
+<nav th:replace="fragments/header :: header"></nav>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-link float-right"
+                    data-toggle="collapse"
+                    aria-expanded="true"
+                    aria-controls="collapseFileUpload"
+                    data-target="#collapseFileUpload">
+                Завантажити файл
+            </button>
+        </div>
+        <div id="collapseFileUpload" class="collapse col-12" aria-labelledby="collapse">
+            <form action="#" th:action="@{/recipes/load}" enctype="multipart/form-data" method="post">
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" name="file">
+                        <label class="custom-file-label" for="customFile">Виберіть файл</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Завантажити</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <form class="col-12" action="#" th:action="@{/recipes}" th:object="${recipeForm}" method="post">
+
+            <div class="form-group">
+                <label for="categoryName">Назва категорії</label>
+                <input type="text" id="categoryName" class="form-control" th:field="*{categoryName}"
+                       placeholder="Введіть назву категорії"/>
+            </div>
+
+            <div class="form-group">
+                <label for="recipeName">Назва рецепту</label>
+                <input type="text" id="recipeName" class="form-control" th:field="*{recipeName}"
+                       placeholder="Введіть назву рецепту"/>
+            </div>
+
+            <table class="table table-bordered">
+                <caption class="font-italic">Таблиця інгредієнтів</caption>
+                <thead>
+                <tr>
+                    <th class="text-center align-middle" scope="col" rowspan="3">Продукти</th>
+                    <th class="text-center" scope="col" colspan="4">Маса, <span class="font-italic"> г</span></th>
+                <th class="text-center" scope="col" colspan="6">Хімічний склад, <span class="font-italic"> г</span></th>
+                </tr>
+                <tr>
+                    <th class="text-center" scope="col" colspan="2">брутто</th>
+                    <th class="text-center" scope="col" colspan="2">нетто</th>
+                    <th class="text-center" scope="col" colspan="3">Кількість поживних речовин на 1 грам продукту</th>
+                </tr>
+                <tr>
+                    <th scope="col">ясла</th>
+                    <th scope="col">садок</th>
+                    <th scope="col">ясла</th>
+                    <th scope="col">садок</th>
+                    <th scope="col">білки</th>
+                    <th scope="col">жири</th>
+                    <th scope="col">вуглеводи</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="border rounded mb-2" th:each="ingredient, stat : ${recipeForm.ingredients}">
+                    <td>
+                        <input type="text" th:id="'ingredientName' + ${stat.index}" class="form-control"
+                               th:name="|ingredients[${stat.index}].ingredientName|"
+                               th:value="${ingredient.ingredientName}">
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" th:id="'ingredientNurseryGrossAmount' + ${stat.index}"
+                               class="form-control"
+                               th:name="|ingredients[${stat.index}].nurseryGrossAmount|"
+                               th:value="${ingredient.nurseryGrossAmount}"/>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" th:id="'ingredientKindergartenGrossAmount' + ${stat.index}"
+                               class="form-control"
+                               th:name="|ingredients[${stat.index}].kindergartenGrossAmount|"
+                               th:value="${ingredient.kindergartenGrossAmount}"/>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" th:id="'ingredientNurseryNetAmount' + ${stat.index}"
+                               class="form-control"
+                               th:name="|ingredients[${stat.index}].nurseryNetAmount|"
+                               th:value="${ingredient.nurseryNetAmount}"/>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" th:id="'ingredientKindergartenNetAmount' + ${stat.index}"
+                               class="form-control"
+                               th:name="|ingredients[${stat.index}].kindergartenNetAmount|"
+                               th:value="${ingredient.kindergartenNetAmount}"/>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" th:id="'ingredientProtein' + ${stat.index}"
+                               class="form-control"
+                               th:name="|ingredients[${stat.index}].protein|"
+                               th:value="${ingredient.protein}"/>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" th:id="'ingredientFat' + ${stat.index}"
+                               class="form-control"
+                               th:name="|ingredients[${stat.index}].fat|"
+                               th:value="${ingredient.fat}"/>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" th:id="'ingredientCarbohydrate' + ${stat.index}"
+                               class="form-control"
+                               th:name="|ingredients[${stat.index}].carbohydrate|"
+                               th:value="${ingredient.carbohydrate}"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="form-group">
+                <label for="recipeDescription">Технологія приготування</label>
+                <textarea type="text" id="recipeDescription" class="form-control" th:field="*{recipeDescription}"
+                          placeholder="Введіть опис технології приготування страви"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+        </form>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

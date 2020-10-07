@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
  * @since : 9/18/2020
  **/
 @ExtendWith(MockitoExtension.class)
-class RecipeConverterTest {
+class RecipeToDtoConverterTest {
 
     private static final String POTATO = "Potato";
     private static final String GRAM = "Gram";
@@ -28,7 +28,7 @@ class RecipeConverterTest {
     private static final String FRIED_POTATOES_IN_A_SKILLET = "Fried potatoes in a skillet";
 
     @InjectMocks
-    private RecipeConverter converter;
+    private RecipeToDtoConverter converter;
     @Mock
     private RecipeIngredientConverterService recipeIngredientConverterService;
 

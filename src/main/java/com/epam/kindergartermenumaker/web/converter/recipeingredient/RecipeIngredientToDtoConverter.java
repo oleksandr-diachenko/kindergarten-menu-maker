@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
  * @since : 9/29/2020
  **/
 @Service
-public class RecipeIngredientConverter implements Converter<RecipeIngredient, RecipeIngredientDTO> {
+public class RecipeIngredientToDtoConverter implements Converter<RecipeIngredient, RecipeIngredientDTO> {
 
     @Override
-    public RecipeIngredientDTO convert(RecipeIngredient element) {
+    public RecipeIngredientDTO convert(RecipeIngredient recipeIngredient) {
         return RecipeIngredientDTO.builder()
-                .recipeIngredient(element)
+                .recipeIngredient(recipeIngredient)
                 .build();
     }
 }

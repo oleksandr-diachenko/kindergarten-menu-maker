@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "recipe_ingredients")
 @Getter
+@Setter
 @ToString
 @Builder
 @EqualsAndHashCode(exclude = "id")

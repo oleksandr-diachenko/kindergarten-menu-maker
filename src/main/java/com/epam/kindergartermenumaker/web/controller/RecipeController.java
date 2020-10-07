@@ -25,6 +25,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecipeController {
 
+    private static final String RECIPE_FORM = "recipeForm";
+    private static final String UPDATE_RECIPE = "update-recipe";
+    private static final String RECIPES = "recipes";
+    private static final String REDIRECT_RECIPES = "redirect:/recipes";
+
     private final CategoryConverterService categoryConverterService;
     private final RecipeServiceAdapter recipeServiceAdapter;
     private final Parser<RecipeForm> parser;
@@ -33,30 +38,41 @@ public class RecipeController {
     public String getAllCategories(Model model) {
         List<CategoryDTO> categoryDTOS = categoryConverterService.getAllNonEmptyCategories();
         model.addAttribute("categories", categoryDTOS);
-        return "recipes";
+        return RECIPES;
     }
 
-    @GetMapping(value = "update")
-    public String getUpdateRecipeForm(Model model, @RequestParam(defaultValue = "1") int ingredientsCount) {
+    @GetMapping(value = "create")
+    public String getCreateRecipeForm(Model model,
+                                      @RequestParam(defaultValue = "1") int ingredientsCount) {
         List<IngredientForm> ingredientForms = new ArrayList<>();
         for (int i = 0; i < ingredientsCount; i++) {
             ingredientForms.add(new IngredientForm());
         }
         RecipeForm recipeForm = new RecipeForm();
         recipeForm.setIngredients(ingredientForms);
-        model.addAttribute("recipeForm", recipeForm);
-        return "update-recipe";
+        model.addAttribute(RECIPE_FORM, recipeForm);
+        return UPDATE_RECIPE;
+    }
+
+    @GetMapping(value = "update")
+    public String getUpdateRecipeForm(Model model, @RequestParam String name) {
+        model.addAttribute(RECIPE_FORM, recipeServiceAdapter.findByRecipeName(name));
+        return UPDATE_RECIPE;
     }
 
     @PostMapping
     public String updateRecipe(@ModelAttribute RecipeForm recipeForm) {
-        recipeServiceAdapter.save(recipeForm);
-        return "redirect:/recipes";
+        if (recipeForm.getRecipeId() > 0) {
+            recipeServiceAdapter.update(recipeForm);
+        } else {
+            recipeServiceAdapter.save(recipeForm);
+        }
+        return REDIRECT_RECIPES;
     }
 
     @PostMapping("load")
     public String loadRecipe(Model model, @RequestParam("file") MultipartFile file) throws IOException {
-        model.addAttribute("recipeForm", parser.parse(file.getInputStream()));
-        return "update-recipe";
+        model.addAttribute(RECIPE_FORM, parser.parse(file.getInputStream()));
+        return UPDATE_RECIPE;
     }
 }

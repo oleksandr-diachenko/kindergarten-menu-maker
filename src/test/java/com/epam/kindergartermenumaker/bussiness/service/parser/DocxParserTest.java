@@ -40,7 +40,7 @@ class DocxParserTest {
 
         RecipeForm recipeForm = parser.parse(inputStream);
 
-        verifyRecipeForm(recipeForm);
+        verifyZapikanka(recipeForm);
     }
 
     @Test
@@ -49,7 +49,7 @@ class DocxParserTest {
 
         RecipeForm recipeForm = parser.parse(inputStream);
 
-        verifyRecipeForm(recipeForm);
+        verifyZapikanka(recipeForm);
     }
 
     @Test
@@ -60,17 +60,35 @@ class DocxParserTest {
 
         assertThat(recipeForm.getRecipeName()).isEqualTo("Чай з лимоном");
         assertThat(recipeForm.getRecipeDescription()).contains("Чай-заварку готують");
+
     }
 
-    private void verifyRecipeForm(RecipeForm recipeForm) {
+    @Test
+    void shouldParseDocxDocumentWithIncorrectSymbols160() throws IOException {
+        InputStream inputStream = new ClassPathResource("/doc/chicken-spaces.docx").getInputStream();
+
+        RecipeForm recipeForm = parser.parse(inputStream);
+
+        assertThat(recipeForm.getRecipeName()).isEqualTo("Тюфтельки курячі 2");
+        assertThat(recipeForm.getRecipeDescription()).contains("Філе курине   пропускають ");
+        assertThat(recipeForm.getIngredients())
+                .contains(getChicken());
+    }
+
+    private IngredientForm getChicken() {
+        return prepareIngredient("Філе курине", 40, 60, 40,
+                60, 0.2, 0.21, 0.01);
+    }
+
+    private void verifyZapikanka(RecipeForm recipeForm) {
         assertThat(recipeForm.getCategoryName()).isNull();
         assertThat(recipeForm.getRecipeName()).isEqualTo(CASSEROLE);
         assertThat(recipeForm.getRecipeDescription()).isEqualTo(CASSEROLE_DESCRIPTION);
         assertThat(recipeForm.getIngredients())
-                .containsExactlyInAnyOrder(getIngredients());
+                .containsExactlyInAnyOrder(getZapikankaIngredients());
     }
 
-    private IngredientForm[] getIngredients() {
+    private IngredientForm[] getZapikankaIngredients() {
         IngredientForm cheese = prepareIngredient(CHEESE, 85, 112, 84,
                 111, 0.18, 0.09, 0.02);
         IngredientForm semolina = prepareIngredient(SEMOLINA, 7, 9, 7,
@@ -86,7 +104,9 @@ class DocxParserTest {
         return new IngredientForm[]{cheese, semolina, sugar, butter, egg, raisins};
     }
 
-    private IngredientForm prepareIngredient(String name, double nurseryGrossAmount, double kindergartenGrossAmount, double nurseryNetAmount, double kindergartenNetAmount, double protein, double fat, double carbohydrate) {
+    private IngredientForm prepareIngredient(String name, double nurseryGrossAmount, double kindergartenGrossAmount,
+                                             double nurseryNetAmount, double kindergartenNetAmount,
+                                             double protein, double fat, double carbohydrate) {
         IngredientForm ingredientForm = new IngredientForm();
         ingredientForm.setIngredientName(name);
         ingredientForm.setNurseryGrossAmount(nurseryGrossAmount);

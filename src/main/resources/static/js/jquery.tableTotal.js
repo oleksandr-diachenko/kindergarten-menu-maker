@@ -56,7 +56,7 @@ $.fn.tableTotal = function tableTotal(args) {
   if (o.totalRow) {
     let i;
 
-    $totalRow.append('<th>Total</th>');
+    $totalRow.append('<td>Вихід страви</td>');
 
     for (i = 0; i < colTotals.length; i += 1) {
       const $cell = $('<td></td>');

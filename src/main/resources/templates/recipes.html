@@ -10,10 +10,10 @@
 <div class="container">
     <div class="mt-5">
         <ul class="nav nav-tabs">
-            <li class="nav-item" th:each="category, categoryIterator : ${categories}">
-                <a class="nav-link" th:classappend="${categoryIterator.first} ? 'show active'" data-toggle="tab"
+            <li class="nav-item mb-1 p-1" th:each="category, categoryIterator : ${categories}">
+                <a class="nav-link border" th:classappend="${categoryIterator.first} ? 'show active'" data-toggle="tab"
                    th:href="@{'#category' + ${category.category.id}}">
-                    <label class="rotate-l-90" th:text="${category.category.name}"></label>
+                    <label th:text="${category.category.name}"></label>
                 </a>
             </li>
         </ul>

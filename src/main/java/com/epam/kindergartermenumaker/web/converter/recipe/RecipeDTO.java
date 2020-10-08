@@ -17,8 +17,13 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class RecipeDTO {
+public class RecipeDTO implements Comparable<RecipeDTO> {
 
     private final Recipe recipe;
     private final List<RecipeIngredientDTO> ingredients;
+
+    @Override
+    public int compareTo(RecipeDTO o) {
+        return recipe.getName().compareTo(o.getRecipe().getName());
+    }
 }

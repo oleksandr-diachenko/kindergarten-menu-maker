@@ -7,4 +7,8 @@ package com.epam.kindergartermenumaker.web.adapter;
 public interface RecipeServiceAdapter {
 
     void save(RecipeForm recipeForm);
+
+    void update(RecipeForm recipeForm);
+
+    RecipeForm findByRecipeName(String name);
 }

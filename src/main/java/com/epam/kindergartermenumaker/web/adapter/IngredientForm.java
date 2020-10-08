@@ -14,6 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 public class IngredientForm {
 
+    private long recipeIngredientId;
     private String ingredientName;
     private double fat;
     private double protein;

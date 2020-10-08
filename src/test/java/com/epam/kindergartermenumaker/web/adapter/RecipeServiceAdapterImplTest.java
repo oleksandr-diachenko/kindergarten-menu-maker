@@ -2,6 +2,7 @@ package com.epam.kindergartermenumaker.web.adapter;
 
 import com.epam.kindergartermenumaker.bussiness.service.logging.*;
 import com.epam.kindergartermenumaker.dao.entity.*;
+import com.epam.kindergartermenumaker.web.converter.Converter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,8 +11,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 /**
@@ -33,6 +37,9 @@ class RecipeServiceAdapterImplTest {
     private static final int PROTEIN_AMOUNT = 6;
     private static final int FAT_AMOUNT = 7;
     private static final int CARBOHYDRATE_AMOUNT = 8;
+    public static final int RECIPE_ID = 1;
+    public static final String MAIN_SOURCE = "Main source";
+    public static final int RECIPE_INGREDIENT_ID = 2;
 
     @InjectMocks
     private RecipeServiceAdapterImpl recipeServiceAdapter;
@@ -49,6 +56,8 @@ class RecipeServiceAdapterImplTest {
     private MeasurementService measurementService;
     @Mock
     private RecipeIngredientService recipeIngredientService;
+    @Mock
+    private Converter<Recipe, RecipeForm> recipeToFormConverter;
 
     private RecipeForm recipeForm;
 
@@ -75,7 +84,7 @@ class RecipeServiceAdapterImplTest {
     @Test
     void shouldReturnExistingMeasurementWhenExistByDescription() {
         Measurement measurement = Measurement.builder().description(GRAM).build();
-        when(measurementService.findByDescription(GRAM)).thenReturn(Optional.of(measurement));
+        when(measurementService.findByDescription(GRAM)).thenReturn(of(measurement));
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -84,7 +93,7 @@ class RecipeServiceAdapterImplTest {
 
     @Test
     void shouldCreateMeasurementWhenNotExistByDescription() {
-        when(measurementService.findByDescription(GRAM)).thenReturn(Optional.empty());
+        when(measurementService.findByDescription(GRAM)).thenReturn(empty());
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -95,7 +104,7 @@ class RecipeServiceAdapterImplTest {
     @Test
     void shouldReturnExistingCategoryWhenExistByName() {
         Category category = Category.builder().name(MAIN_COURSE).build();
-        when(categoryService.findByName(MAIN_COURSE)).thenReturn(Optional.of(category));
+        when(categoryService.findByName(MAIN_COURSE)).thenReturn(of(category));
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -104,7 +113,7 @@ class RecipeServiceAdapterImplTest {
 
     @Test
     void shouldCreateCategoryWhenNotExistByName() {
-        when(categoryService.findByName(MAIN_COURSE)).thenReturn(Optional.empty());
+        when(categoryService.findByName(MAIN_COURSE)).thenReturn(empty());
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -115,7 +124,7 @@ class RecipeServiceAdapterImplTest {
     @Test
     void shouldReturnExistingRecipeWhenExistByName() {
         Recipe recipe = Recipe.builder().name(FRIED_POTATOES).build();
-        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(Optional.of(recipe));
+        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(of(recipe));
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -124,7 +133,7 @@ class RecipeServiceAdapterImplTest {
 
     @Test
     void shouldCreateRecipeWhenNotExistByName() {
-        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(Optional.empty());
+        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(empty());
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -136,9 +145,9 @@ class RecipeServiceAdapterImplTest {
     void shouldReturnExistingQuantityWhenExistByNetAndGross() {
         Quantity quantity = Quantity.builder().amountNet(NURSERY_NET_AMOUNT).amountGross(NURSERY_GROSS_AMOUNT).build();
         when(quantityService.findByAmountNetAndAmountGross(NURSERY_NET_AMOUNT, NURSERY_GROSS_AMOUNT))
-                .thenReturn(Optional.of(quantity));
+                .thenReturn(of(quantity));
         when(quantityService.findByAmountNetAndAmountGross(KINDERGARTEN_NET_AMOUNT, KINDERGARTEN_GROSS_AMOUNT))
-                .thenReturn(Optional.of(quantity));
+                .thenReturn(of(quantity));
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -148,9 +157,9 @@ class RecipeServiceAdapterImplTest {
     @Test
     void shouldCreateQuantityWhenNotExistByName() {
         when(quantityService.findByAmountNetAndAmountGross(NURSERY_NET_AMOUNT, NURSERY_GROSS_AMOUNT))
-                .thenReturn(Optional.empty());
+                .thenReturn(empty());
         when(quantityService.findByAmountNetAndAmountGross(KINDERGARTEN_NET_AMOUNT, KINDERGARTEN_GROSS_AMOUNT))
-                .thenReturn(Optional.empty());
+                .thenReturn(empty());
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -167,7 +176,7 @@ class RecipeServiceAdapterImplTest {
         Ingredient ingredient = Ingredient.builder()
                 .name(POTATO).carbohydrate(CARBOHYDRATE_AMOUNT).protein(PROTEIN_AMOUNT).fat(FAT_AMOUNT).build();
         when(ingredientService.findByName(POTATO))
-                .thenReturn(Optional.of(ingredient));
+                .thenReturn(of(ingredient));
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -176,7 +185,7 @@ class RecipeServiceAdapterImplTest {
 
     @Test
     void shouldCreateIngredientWhenNotExistByName() {
-        when(ingredientService.findByName(POTATO)).thenReturn(Optional.empty());
+        when(ingredientService.findByName(POTATO)).thenReturn(empty());
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -191,10 +200,10 @@ class RecipeServiceAdapterImplTest {
         Quantity quantity = Quantity.builder().build();
         Ingredient ingredient = Ingredient.builder().build();
         Measurement measurement = Measurement.builder().build();
-        when(recipeService.findByName(anyString())).thenReturn(Optional.of(recipe));
-        when(quantityService.findByAmountNetAndAmountGross(anyDouble(), anyDouble())).thenReturn(Optional.of(quantity));
-        when(ingredientService.findByName(anyString())).thenReturn(Optional.of(ingredient));
-        when(measurementService.findByDescription(anyString())).thenReturn(Optional.of(measurement));
+        when(recipeService.findByName(anyString())).thenReturn(of(recipe));
+        when(quantityService.findByAmountNetAndAmountGross(anyDouble(), anyDouble())).thenReturn(of(quantity));
+        when(ingredientService.findByName(anyString())).thenReturn(of(ingredient));
+        when(measurementService.findByDescription(anyString())).thenReturn(of(measurement));
 
         recipeServiceAdapter.save(recipeForm);
 
@@ -205,5 +214,262 @@ class RecipeServiceAdapterImplTest {
                 .ingredient(ingredient)
                 .measurement(measurement).build();
         verify(recipeIngredientService).save(recipeIngredient);
+    }
+
+    @Test
+    void shouldUpdateCategoryWhenCategoryExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        recipeForm.setRecipeId(RECIPE_ID);
+        recipeForm.setCategoryName(MAIN_SOURCE);
+        Recipe recipe = Recipe.builder().build();
+        when(recipeService.findById(RECIPE_ID)).thenReturn(of(recipe));
+        Category mainSource = Category.builder().name(MAIN_SOURCE).build();
+        when(categoryService.findByName(MAIN_SOURCE)).thenReturn(of(mainSource));
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(categoryService, never()).save(any());
+        verify(categoryService).findByName(MAIN_SOURCE);
+        assertThat(recipe.getCategory()).isEqualTo(mainSource);
+    }
+
+    @Test
+    void shouldUpdateCategoryWhenCategoryNotExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        recipeForm.setRecipeId(RECIPE_ID);
+        recipeForm.setCategoryName(MAIN_SOURCE);
+        Recipe recipe = Recipe.builder().build();
+        when(recipeService.findById(RECIPE_ID)).thenReturn(of(recipe));
+        when(categoryService.findByName(MAIN_SOURCE)).thenReturn(empty());
+        Category drink = Category.builder().name(MAIN_SOURCE).build();
+        when(categoryService.save(drink)).thenReturn(drink);
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(categoryService).save(drink);
+        verify(categoryService).findByName(MAIN_SOURCE);
+        assertThat(recipe.getCategory()).isEqualTo(drink);
+    }
+
+    @Test
+    void shouldUpdateRecipeWhenNameNotChanged() {
+        RecipeForm recipeForm = new RecipeForm();
+        recipeForm.setRecipeId(RECIPE_ID);
+        recipeForm.setRecipeName(FRIED_POTATOES);
+        recipeForm.setRecipeDescription(FRIED_POTATOES_IN_A_SKILLET);
+        recipeForm.setCategoryName(MAIN_COURSE);
+        Category category = Category.builder().name(MAIN_COURSE).build();
+        Recipe recipe = Recipe.builder().id(RECIPE_ID).description(FRIED_POTATOES_IN_A_SKILLET).category(category).build();
+        when(categoryService.findByName(anyString())).thenReturn(of(category));
+        when(recipeService.findById(RECIPE_ID)).thenReturn(of(recipe));
+        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(of(recipe));
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(recipeService).save(recipe);
+    }
+
+    @Test
+    void shouldThrowExceptionOnUpdateRecipeWhenRecipeExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        recipeForm.setRecipeId(RECIPE_ID);
+        recipeForm.setRecipeName(FRIED_POTATOES);
+        Recipe recipe = Recipe.builder().build();
+        when(recipeService.findById(RECIPE_ID)).thenReturn(of(recipe));
+        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(of(recipe));
+
+        assertThatThrownBy(() -> recipeServiceAdapter.update(recipeForm))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void shouldNotUpdateRecipeIngredientWhenNotPresentById() {
+        RecipeForm recipeForm = new RecipeForm();
+        IngredientForm ingredientForm = new IngredientForm();
+        recipeForm.setIngredients(List.of(ingredientForm));
+        Recipe recipe = Recipe.builder().build();
+        when(recipeService.findById(anyLong())).thenReturn(of(recipe));
+        when(recipeIngredientService.findById(anyLong())).thenReturn(empty());
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(ingredientService, never()).save(any());
+        verify(measurementService, never()).save(any());
+        verify(quantityService, never()).save(any());
+        verify(recipeIngredientService, never()).save(any());
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenRecipeIngredientExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        IngredientForm ingredientForm = prepareIngredientForm();
+        recipeForm.setIngredients(List.of(ingredientForm));
+        Recipe recipe = Recipe.builder().build();
+        when(recipeService.findById(anyLong())).thenReturn(of(recipe));
+        Measurement gram = Measurement.builder().description("Грам").build();
+        Quantity kindergartenQuantity = Quantity.builder().amountGross(2).amountNet(1).build();
+        Quantity nurseryQuantity = Quantity.builder().amountGross(4).amountNet(3).build();
+        Ingredient potato = Ingredient.builder().name(POTATO).protein(5).fat(6).carbohydrate(7).build();
+        RecipeIngredient recipeIngredient = RecipeIngredient.builder()
+                .recipe(recipe)
+                .measurement(gram)
+                .kindergartenQuantity(kindergartenQuantity)
+                .nurseryQuantity(nurseryQuantity)
+                .ingredient(potato)
+                .build();
+        when(recipeIngredientService.findById(anyLong())).thenReturn(of(recipeIngredient));
+        when(measurementService.findByDescription("Грам")).thenReturn(of(gram));
+        when(quantityService.findByAmountNetAndAmountGross(1, 2)).thenReturn(of(kindergartenQuantity));
+        when(quantityService.findByAmountNetAndAmountGross(3, 4)).thenReturn(of(nurseryQuantity));
+        when(ingredientService.findByName(POTATO)).thenReturn(of(potato));
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(measurementService, never()).save(any());
+        verify(quantityService, never()).save(any());
+        verify(ingredientService, never()).save(any());
+        verify(recipeIngredientService).save(recipeIngredient);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenMeasurementExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+        Measurement gram = Measurement.builder().description("Грам").build();
+        when(measurementService.findByDescription(anyString())).thenReturn(of(gram));
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(measurementService, never()).save(gram);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenMeasurementNotExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+
+        when(measurementService.findByDescription(anyString())).thenReturn(empty());
+        Measurement gram = Measurement.builder().description("Грам").build();
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(measurementService).save(gram);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenNurseryQuantityExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+        Quantity nurseryQuantity = Quantity.builder().amountGross(4).amountNet(3).build();
+        when(quantityService.findByAmountNetAndAmountGross(anyDouble(), anyDouble())).thenReturn(of(nurseryQuantity));
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(quantityService, never()).save(nurseryQuantity);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenNurseryQuantityNotExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+        Quantity nurseryQuantity = Quantity.builder().amountGross(4).amountNet(3).build();
+        when(quantityService.findByAmountNetAndAmountGross(anyDouble(), anyDouble())).thenReturn(empty());
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(quantityService).save(nurseryQuantity);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenKindergartenQuantityExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+        Quantity kindergartenQuantity = Quantity.builder().amountGross(2).amountNet(1).build();
+        when(quantityService.findByAmountNetAndAmountGross(anyDouble(), anyDouble())).thenReturn(of(kindergartenQuantity));
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(quantityService, never()).save(kindergartenQuantity);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenKindergartenQuantityNotExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+        Quantity kindergartenQuantity = Quantity.builder().amountGross(2).amountNet(1).build();
+        when(quantityService.findByAmountNetAndAmountGross(anyDouble(), anyDouble())).thenReturn(empty());
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(quantityService).save(kindergartenQuantity);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenIngredientExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+        Ingredient ingredient = Ingredient.builder().name(POTATO).protein(5).fat(6).carbohydrate(7).build();
+        when(ingredientService.findByName(POTATO)).thenReturn(of(ingredient));
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(ingredientService, never()).save(ingredient);
+    }
+
+    @Test
+    void shouldUpdateRecipeIngredientWhenIngredientNotExists() {
+        RecipeForm recipeForm = new RecipeForm();
+        prepareDataForUpdate(recipeForm);
+        Ingredient ingredient = Ingredient.builder().name(POTATO).protein(5).fat(6).carbohydrate(7).build();
+        when(ingredientService.findByName(POTATO)).thenReturn(empty());
+
+        recipeServiceAdapter.update(recipeForm);
+
+        verify(ingredientService).save(ingredient);
+    }
+
+    @Test
+    void shouldReturnEmptyRecipeFormWhenRecipeNotExists() {
+        when(recipeService.findByName(anyString())).thenReturn(empty());
+
+        RecipeForm actual = recipeServiceAdapter.findByRecipeName(FRIED_POTATOES);
+
+        assertThat(actual).isEqualTo(new RecipeForm());
+    }
+
+    @Test
+    void shouldReturnRecipeFormWhenRecipeExists() {
+        Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).build();
+        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(of(friedPotatoes));
+        RecipeForm recipeForm = new RecipeForm();
+        recipeForm.setRecipeName(FRIED_POTATOES);
+        when(recipeToFormConverter.convert(friedPotatoes)).thenReturn(recipeForm);
+
+        RecipeForm actual = recipeServiceAdapter.findByRecipeName(FRIED_POTATOES);
+
+        assertThat(actual).isEqualTo(recipeForm);
+    }
+
+    private void prepareDataForUpdate(RecipeForm recipeForm) {
+        IngredientForm ingredientForm = prepareIngredientForm();
+        recipeForm.setIngredients(List.of(ingredientForm));
+        Recipe recipe = Recipe.builder().build();
+        when(recipeService.findById(anyLong())).thenReturn(of(recipe));
+        RecipeIngredient recipeIngredient = RecipeIngredient.builder().recipe(recipe).build();
+        when(recipeIngredientService.findById(anyLong())).thenReturn(of(recipeIngredient));
+    }
+
+    private IngredientForm prepareIngredientForm() {
+        IngredientForm ingredientForm = new IngredientForm();
+        ingredientForm.setRecipeIngredientId(RECIPE_INGREDIENT_ID);
+        ingredientForm.setIngredientName(POTATO);
+        ingredientForm.setKindergartenGrossAmount(2);
+        ingredientForm.setKindergartenNetAmount(1);
+        ingredientForm.setNurseryGrossAmount(4);
+        ingredientForm.setNurseryNetAmount(3);
+        ingredientForm.setProtein(5);
+        ingredientForm.setFat(6);
+        ingredientForm.setCarbohydrate(7);
+        return ingredientForm;
     }
 }

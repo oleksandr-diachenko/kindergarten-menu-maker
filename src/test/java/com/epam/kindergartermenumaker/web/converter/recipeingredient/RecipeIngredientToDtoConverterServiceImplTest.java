@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
  * @since : 9/29/2020
  **/
 @ExtendWith(MockitoExtension.class)
-class RecipeIngredientConverterServiceImplTest {
+class RecipeIngredientToDtoConverterServiceImplTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
 

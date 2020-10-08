@@ -17,19 +17,19 @@ import java.util.stream.Collectors;
  **/
 @Service
 @RequiredArgsConstructor
-public class CategoryConverter implements Converter<Category, CategoryDTO> {
+public class CategoryToDtoConverter implements Converter<Category, CategoryDTO> {
 
     private final RecipeService recipeService;
     private final Converter<Recipe, RecipeDTO> recipeToDtoConverter;
 
     @Override
-    public CategoryDTO convert(Category element) {
-        List<Recipe> recipes = recipeService.findByCategory(element);
+    public CategoryDTO convert(Category category) {
+        List<Recipe> recipes = recipeService.findByCategory(category);
         List<RecipeDTO> recipeDTOS = recipes.stream()
                 .map(recipeToDtoConverter::convert)
                 .collect(Collectors.toList());
         return CategoryDTO.builder()
-                .category(element)
+                .category(category)
                 .recipes(recipeDTOS)
                 .build();
     }

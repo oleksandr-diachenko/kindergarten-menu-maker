@@ -25,8 +25,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author : Oleksandr Diachenko
@@ -71,20 +70,33 @@ class RecipeControllerTest {
     }
 
     @Test
-    void shouldSaveRecipeFormAndRedirectToRecipesPage() {
+    void shouldSaveRecipeFormAndRedirectToRecipesPageWhenRecipeIdIsZero() {
         RecipeForm recipeForm = new RecipeForm();
 
         String page = controller.updateRecipe(recipeForm);
 
         assertThat(page).isEqualTo("redirect:/recipes");
         verify(recipeServiceAdapter).save(recipeForm);
+        verify(recipeServiceAdapter, never()).update(recipeForm);
+    }
+
+    @Test
+    void shouldUpdateRecipeFormAndRedirectToRecipesPageWhenRecipeIdIsMoreTheZero() {
+        RecipeForm recipeForm = new RecipeForm();
+        recipeForm.setRecipeId(1);
+
+        String page = controller.updateRecipe(recipeForm);
+
+        assertThat(page).isEqualTo("redirect:/recipes");
+        verify(recipeServiceAdapter).update(recipeForm);
+        verify(recipeServiceAdapter, never()).save(recipeForm);
     }
 
     @Test
     void shouldSetRecipeFormToModelAndReturnUpdateRecipePage() {
         ArgumentCaptor<RecipeForm> captor = ArgumentCaptor.forClass(RecipeForm.class);
 
-        String page = controller.getUpdateRecipeForm(model, 2);
+        String page = controller.getCreateRecipeForm(model, 2);
 
         verify(model).addAttribute(eq("recipeForm"), captor.capture());
         assertThat(captor.getValue().getIngredients()).hasSize(2);
@@ -101,6 +113,16 @@ class RecipeControllerTest {
 
         verify(parser).parse(inputStream);
         verify(model).addAttribute("recipeForm", recipeForm);
+        assertThat(page).isEqualTo("update-recipe");
+    }
+
+    @Test
+    void shouldSetRecipeFormOnUpdate() {
+        when(recipeServiceAdapter.findByRecipeName(FRIED_POTATOES)).thenReturn(new RecipeForm());
+
+        String page = controller.getUpdateRecipeForm(model, FRIED_POTATOES);
+
+        verify(model).addAttribute("recipeForm", new RecipeForm());
         assertThat(page).isEqualTo("update-recipe");
     }
 

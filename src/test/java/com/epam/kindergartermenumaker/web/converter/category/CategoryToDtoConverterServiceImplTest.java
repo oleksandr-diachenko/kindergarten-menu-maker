@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
  * @since : 9/28/2020
  **/
 @ExtendWith(MockitoExtension.class)
-class CategoryConverterServiceImplTest {
+class CategoryToDtoConverterServiceImplTest {
 
     private static final String MAIN_SOURCE = "Main source";
 

@@ -4,7 +4,7 @@ package com.epam.kindergartermenumaker.web.converter;
  * @author : Oleksandr Diachenko
  * @since : 9/18/2020
  **/
-public interface Converter<E, T> {
+public interface Converter<T, R> {
 
-    T convert(E element);
+    R convert(T type);
 }

@@ -14,12 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since : 9/29/2020
  **/
 @ExtendWith(MockitoExtension.class)
-class RecipeIngredientConverterTest {
+class RecipeIngredientToDtoConverterTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
 
     @InjectMocks
-    private RecipeIngredientConverter converter;
+    private RecipeIngredientToDtoConverter converter;
 
     @Test
     void shouldConvertRecipeIngredientToDTO() {

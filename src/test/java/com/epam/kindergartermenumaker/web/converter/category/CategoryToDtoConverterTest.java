@@ -4,8 +4,6 @@ import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeService;
 import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.converter.Converter;
-import com.epam.kindergartermenumaker.web.converter.category.CategoryConverter;
-import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
 import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,13 +21,13 @@ import static org.mockito.Mockito.when;
  * @since : 9/18/2020
  **/
 @ExtendWith(MockitoExtension.class)
-class CategoryConverterTest {
+class CategoryToDtoConverterTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
     private static final String MAIN_SOURCE = "Main source";
 
     @InjectMocks
-    private CategoryConverter converter;
+    private CategoryToDtoConverter converter;
     @Mock
     private RecipeService recipeService;
     @Mock

@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
+import static java.lang.Double.parseDouble;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.math3.util.Precision.round;
 
 /**
@@ -62,8 +63,12 @@ public class DocxParser implements Parser<RecipeForm> {
     private List<IBodyElement> getNonEmptyElements(XWPFWordExtractor extractor) {
         List<IBodyElement> elements = ((XWPFDocument) extractor.getDocument()).getBodyElements();
         return elements.stream()
-                .filter(element -> isTable(element) || nonEmptyParagraph(element))
+                .filter(this::nonEmptyElement)
                 .collect(Collectors.toList());
+    }
+
+    private boolean nonEmptyElement(IBodyElement element) {
+        return isTable(element) || nonEmptyParagraph(element);
     }
 
     private boolean isTable(IBodyElement element) {
@@ -71,8 +76,16 @@ public class DocxParser implements Parser<RecipeForm> {
     }
 
     private boolean nonEmptyParagraph(IBodyElement element) {
-        return element instanceof XWPFParagraph
-                && !((XWPFParagraph) element).getText().isEmpty();
+        if (element instanceof XWPFParagraph) {
+            XWPFParagraph paragraph = (XWPFParagraph) element;
+            String text = removeIncorrectSymbols(paragraph.getText());
+            return !isWhitespace(text);
+        }
+        return false;
+    }
+
+    private String removeIncorrectSymbols(String str) {
+        return remove(str, (char) 160);
     }
 
     private List<IngredientForm> getIngredientForms(List<XWPFTableRow> rows) {
@@ -106,7 +119,7 @@ public class DocxParser implements Parser<RecipeForm> {
     private void populateCarbohydrateAmount(XWPFTableRow row, IngredientForm ingredientForm) {
         double nurseryNet = getNurseryNetAmount(row);
         if (nurseryNet != 0) {
-            double carbohydrate = getCellValue(row, CARBOHYDRATE_INDEX);
+            double carbohydrate = getNumericCellValue(row, CARBOHYDRATE_INDEX);
             ingredientForm.setCarbohydrate(round(carbohydrate / nurseryNet, SCALE));
         }
     }
@@ -114,7 +127,7 @@ public class DocxParser implements Parser<RecipeForm> {
     private void populateFatAmount(XWPFTableRow row, IngredientForm ingredientForm) {
         double nurseryNet = getNurseryNetAmount(row);
         if (nurseryNet != 0) {
-            double fat = getCellValue(row, FAT_INDEX);
+            double fat = getNumericCellValue(row, FAT_INDEX);
             ingredientForm.setFat(round(fat / nurseryNet, SCALE));
         }
     }
@@ -122,13 +135,13 @@ public class DocxParser implements Parser<RecipeForm> {
     private void populateProteinAmount(XWPFTableRow row, IngredientForm ingredientForm) {
         double nurseryNet = getNurseryNetAmount(row);
         if (nurseryNet != 0) {
-            double protein = getCellValue(row, PROTEIN_INDEX);
+            double protein = getNumericCellValue(row, PROTEIN_INDEX);
             ingredientForm.setProtein(round(protein / nurseryNet, SCALE));
         }
     }
 
     private void populateKindergartenNetAmount(XWPFTableRow row, IngredientForm ingredientForm) {
-        ingredientForm.setKindergartenNetAmount(getCellValue(row, KINDERGARTEN_NET_INDEX));
+        ingredientForm.setKindergartenNetAmount(getNumericCellValue(row, KINDERGARTEN_NET_INDEX));
     }
 
     private void populateNurseryNetAmount(XWPFTableRow row, IngredientForm ingredientForm) {
@@ -136,15 +149,16 @@ public class DocxParser implements Parser<RecipeForm> {
     }
 
     private void populateKindergartenGrossAmount(XWPFTableRow row, IngredientForm ingredientForm) {
-        ingredientForm.setKindergartenGrossAmount(getCellValue(row, KINDERGARTEN_GROSS_INDEX));
+        ingredientForm.setKindergartenGrossAmount(getNumericCellValue(row, KINDERGARTEN_GROSS_INDEX));
     }
 
     private void populateNurseryGrossAmount(XWPFTableRow row, IngredientForm ingredientForm) {
-        ingredientForm.setNurseryGrossAmount(getCellValue(row, NURSERY_GROSS_INDEX));
+        ingredientForm.setNurseryGrossAmount(getNumericCellValue(row, NURSERY_GROSS_INDEX));
     }
 
     private void populateIngredientName(XWPFTableRow row, IngredientForm ingredientForm) {
-        ingredientForm.setIngredientName(row.getCell(INGREDIENT_NAME_INDEX).getText());
+        String ingredientName = row.getCell(INGREDIENT_NAME_INDEX).getText();
+        ingredientForm.setIngredientName(removeIncorrectSymbols(ingredientName));
     }
 
     private List<XWPFTableRow> getTableRows(List<IBodyElement> bodyElements) {
@@ -154,18 +168,20 @@ public class DocxParser implements Parser<RecipeForm> {
 
     private void populateRecipeName(RecipeForm recipeForm, List<IBodyElement> bodyElements) {
         String recipeName = ((XWPFParagraph) bodyElements.get(RECIPE_NAME_INDEX)).getParagraphText();
-        recipeForm.setRecipeName(recipeName);
+        recipeForm.setRecipeName(removeIncorrectSymbols(recipeName));
     }
 
     private double getNurseryNetAmount(XWPFTableRow row) {
-        return getCellValue(row, NURSERY_NET_INDEX);
+        return getNumericCellValue(row, NURSERY_NET_INDEX);
     }
 
-    private double getCellValue(XWPFTableRow row, int pos) {
+    private double getNumericCellValue(XWPFTableRow row, int pos) {
         try {
-            return Double.parseDouble(row.getCell(pos).getText().replace(',', '.'));
+            String string = removeIncorrectSymbols(row.getCell(pos).getText());
+            String value = replaceChars(string, ',', '.');
+            return parseDouble(value);
         } catch (NumberFormatException exception) {
-            return 0.0;
+            return 0;
         }
     }
 }

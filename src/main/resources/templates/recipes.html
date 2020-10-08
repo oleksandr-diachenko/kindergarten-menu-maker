@@ -20,7 +20,7 @@
         <div class="tab-content">
             <div class="tab-pane fade" th:classappend="${categoryIterator.first} ? 'show active'"
                  th:id="category + ${category.category.id}" th:each="category, categoryIterator : ${categories}">
-                <div class="card" th:each="recipe : ${category.recipes}">
+                <div class="card" th:each="recipe : ${#lists.sort(category.recipes)}">
                     <h5 class="mb-0">
                         <button th:text="${recipe.recipe.name}" class="btn btn-link"
                                 data-toggle="collapse"

@@ -37,7 +37,8 @@
                             <span class="font-italic"> Технологія приготовання страви:</span>
                             <p class="pl-4" th:text="${recipe.recipe.description}"></p>
                         </div>
-                        <a th:href="@{/recipes/update(name=${recipe.recipe.name})}" class="btn btn-link">update</a>
+                        <a th:href="@{/recipes/update(name=${recipe.recipe.name})}"
+                           class="float-right btn btn-link text-secondary">Змінити</a>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,8 @@
 <div th:fragment="recipe-table" xmlns:th="http://www.w3.org/1999/xhtml">
 
-    <table th:id="'table' + ${recipe.recipe.id}" class="table table-bordered">
+    <table th:id="'table' + ${recipe.recipe.id}" class="table table-hover table-sm table-bordered table-responsive-md">
         <caption class="font-italic" th:text="'Таблиця інгредієнтів для: ' + ${recipe.recipe.name}"></caption>
-        <thead>
+        <thead class="thead-light">
         <tr>
             <th class="text-center align-middle" scope="col" rowspan="3">Продукти</th>
             <th class="text-center" scope="col" colspan="4">Маса, <span class="font-italic"> г</span></th>

@@ -59,7 +59,7 @@ public class RecipeIngredientDTO {
 
     private void calculateKindergartenEnergyValue() {
         kindergartenEnergyValue = round(kindergartenSumCarbohydrate * CARBOHYDRATE_MULTIPLIER
-                + kindergartenSumProtein + PROTEIN_MULTIPLIER
+                + kindergartenSumProtein * PROTEIN_MULTIPLIER
                 + kindergartenSumFat * FAT_MULTIPLIER, 2);
     }
 

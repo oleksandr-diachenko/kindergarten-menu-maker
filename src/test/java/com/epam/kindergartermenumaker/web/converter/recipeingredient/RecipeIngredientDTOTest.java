@@ -29,7 +29,7 @@ class RecipeIngredientDTOTest {
         assertThat(recipeIngredientDTO.getKindergartenSumCarbohydrate()).isEqualTo(2 * 7);
 
         assertThat(recipeIngredientDTO.getNurseryEnergyValue()).isEqualTo(280);
-        assertThat(recipeIngredientDTO.getKindergartenEnergyValue()).isEqualTo(333);
+        assertThat(recipeIngredientDTO.getKindergartenEnergyValue()).isEqualTo(392);
     }
 
     @Test
@@ -138,6 +138,18 @@ class RecipeIngredientDTOTest {
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, null, null);
 
         assertThat(recipeIngredientDTO.getKindergartenSumCarbohydrate()).isZero();
+    }
+
+    @Test
+    void shouldSetEnergyValueAsZeroWhenAllMineralsIsZero() {
+        Ingredient ingredient = Ingredient.builder().carbohydrate(0).protein(0).fat(0).build();
+        Quantity nurseryQuantity = Quantity.builder().amountNet(5).build();
+        Quantity kindergartenQuantity = Quantity.builder().amountNet(7).build();
+
+        RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, nurseryQuantity, kindergartenQuantity);
+
+        assertThat(recipeIngredientDTO.getKindergartenEnergyValue()).isZero();
+        assertThat(recipeIngredientDTO.getNurseryEnergyValue()).isZero();
     }
 
     private RecipeIngredientDTO buildRecipeIngredientDTO(Ingredient ingredient, Quantity nurseryQuantity, Quantity kindergartenQuantity) {

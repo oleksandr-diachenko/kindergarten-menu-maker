@@ -35,24 +35,24 @@
         <tr th:each="ingredient : ${recipe.ingredients}">
             <th th:text="${ingredient.recipeIngredient.ingredient.name}"> -</th>
 
-            <td th:text="${ingredient.recipeIngredient.nurseryQuantity.amountGross}"> -</td>
-            <td th:text="${ingredient.recipeIngredient.kindergartenQuantity.amountGross}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.nurseryQuantity.amountGross)}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.kindergartenQuantity.amountGross)}"> -</td>
 
-            <td th:text="${ingredient.recipeIngredient.nurseryQuantity.amountNet}"> -</td>
-            <td th:text="${ingredient.recipeIngredient.kindergartenQuantity.amountNet}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.nurseryQuantity.amountNet)}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.kindergartenQuantity.amountNet)}"> -</td>
 
 
-            <td th:text="${ingredient.nurserySumProtein}"> -</td>
-            <td th:text="${ingredient.kindergartenSumProtein}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.nurserySumProtein)}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.kindergartenSumProtein)}"> -</td>
 
-            <td th:text="${ingredient.nurserySumFat}"> -</td>
-            <td th:text="${ingredient.kindergartenSumFat}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.nurserySumFat)}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.kindergartenSumFat)}"> -</td>
 
-            <td th:text="${ingredient.nurserySumCarbohydrate}"> -</td>
-            <td th:text="${ingredient.kindergartenSumCarbohydrate}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.nurserySumCarbohydrate)}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.kindergartenSumCarbohydrate)}"> -</td>
 
-            <td th:text="${ingredient.nurseryEnergyValue}"> -</td>
-            <td th:text="${ingredient.kindergartenEnergyValue}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.nurseryEnergyValue)}"> -</td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.kindergartenEnergyValue)}"> -</td>
         </tr>
         </tbody>
     </table>

@@ -7,6 +7,12 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/recipes}">Рецепти</a>
             </li>
+            <li>
+                <form class="form-inline" method="get" action="#" th:action="@{/recipes/create}" enctype="multipart/form-data" >
+                    <input class="form-control" style="width: 80px" th:name="ingredientsCount" type="number" min="1" value="1" step="1" placeholder="Кількість ингредіентів" aria-label="Створити">
+                    <button class="btn btn-outline-secondary" type="submit">Створити</button>
+                </form>
+            </li>
         </ul>
     </div>
 </nav>

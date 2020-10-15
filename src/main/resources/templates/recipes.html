@@ -8,6 +8,17 @@
 <body>
 <nav th:replace="fragments/header :: header"></nav>
 <div class="container">
+
+    <form action="#" th:action="@{/recipes}" th:object="${recipeForm}" method="get">
+        <div class="form-row">
+            <div class="col-11">
+                <input class="form-control" th:name="filter" placeholder="Введіть пошукове слово" type="text">
+            </div>
+            <div class="col">
+                <button class="btn btn-outline-secondary" type="submit">Знайти</button>
+            </div>
+        </div>
+    </form>
     <div class="mt-5">
         <ul class="nav nav-tabs">
             <li class="nav-item mb-1 p-1" th:each="category, categoryIterator : ${categories}">

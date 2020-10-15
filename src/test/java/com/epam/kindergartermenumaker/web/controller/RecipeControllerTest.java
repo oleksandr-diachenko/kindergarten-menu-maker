@@ -35,7 +35,6 @@ import static org.mockito.Mockito.*;
 class RecipeControllerTest {
 
     private static final String FRIED_POTATOES = "Fried potatoes";
-    private static final String MAIN_COURSE = "Main course";
 
     @InjectMocks
     private RecipeController controller;
@@ -53,17 +52,22 @@ class RecipeControllerTest {
     private InputStream inputStream;
 
     @Test
-    void shouldSetRecipeDTOsAndReturnRecipesPage() {
-        Category mainCourse = Category.builder().name(MAIN_COURSE).build();
-        Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).category(mainCourse).build();
-        List<RecipeIngredientDTO> friedPotatoesRecipeIngredients = List.of(buildRecipeIngredientDTO(friedPotatoes));
-        RecipeDTO friedPotatoesDTO = buildRecipeDTO(friedPotatoes, friedPotatoesRecipeIngredients);
-        List<RecipeDTO> recipeDTOs = List.of(friedPotatoesDTO);
-        CategoryDTO mainCourseDTO = buildCategoryDTO(mainCourse, recipeDTOs);
-        List<CategoryDTO> categoriesDTOs = List.of(mainCourseDTO);
+    void shouldSetAllNonEmptyRecipeDTOsAndReturnRecipesPage() {
+        List<CategoryDTO> categoriesDTOs = List.of(CategoryDTO.builder().build());
         when(service.getAllNonEmptyCategories()).thenReturn(categoriesDTOs);
 
-        String page = controller.getAllCategories(model);
+        String page = controller.getAllCategories(model, "");
+
+        assertThat(page).isEqualTo("recipes");
+        verify(model).addAttribute("categories", categoriesDTOs);
+    }
+
+    @Test
+    void shouldSetRecipeDTOsByFilterAndReturnRecipesPage() {
+        List<CategoryDTO> categoriesDTOs = List.of(CategoryDTO.builder().build());
+        when(service.getCategoriesByFilter("main")).thenReturn(categoriesDTOs);
+
+        String page = controller.getAllCategories(model, "main");
 
         assertThat(page).isEqualTo("recipes");
         verify(model).addAttribute("categories", categoriesDTOs);

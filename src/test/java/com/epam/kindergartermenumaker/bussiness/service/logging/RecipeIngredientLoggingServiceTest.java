@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.TestData;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import com.epam.kindergartermenumaker.dao.repository.RecipeIngredientRepository;
@@ -12,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,8 +25,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class RecipeIngredientLoggingServiceTest {
 
-    private static final long TEN = 10;
-
     @InjectMocks
     private RecipeIngredientLoggingService service;
 
@@ -33,46 +33,40 @@ class RecipeIngredientLoggingServiceTest {
 
     @Test
     void shouldCallSaveRepositoryWhenSaveTriggered() {
-        RecipeIngredient dummy = RecipeIngredient.builder()
-                .id(1)
-                .build();
-        when(repository.save(dummy)).thenReturn(dummy);
+        RecipeIngredient recipeIngredient = TestData.recipeIngredient();
+        when(repository.save(recipeIngredient)).thenReturn(recipeIngredient);
 
-        RecipeIngredient actual = service.save(dummy);
+        RecipeIngredient actual = service.save(recipeIngredient);
 
         assertThat(actual.getId()).isEqualTo(1);
-        verify(repository).save(dummy);
+        verify(repository).save(recipeIngredient);
     }
 
     @Test
     void shouldReturnNonEmptyWhenFindByIdTriggered() {
-        RecipeIngredient dummy = RecipeIngredient.builder()
-                .id(TEN)
-                .build();
-        when(repository.findById(TEN)).thenReturn(Optional.of(dummy));
+        RecipeIngredient recipeIngredient = TestData.recipeIngredient();
+        when(repository.findById(1L)).thenReturn(of(recipeIngredient));
 
-        Optional<RecipeIngredient> actual = service.findById(TEN);
+        Optional<RecipeIngredient> actual = service.findById(1);
 
         assertThat(actual).isNotEmpty();
     }
 
     @Test
     void shouldReturnEmptyWhenFindByIdTriggered() {
-        Optional<RecipeIngredient> actual = service.findById(TEN);
+        Optional<RecipeIngredient> actual = service.findById(1);
 
         assertThat(actual).isEmpty();
     }
 
     @Test
     void shouldReturnOneRecipeIngredientWhenFindOne() {
-        RecipeIngredient dummy = RecipeIngredient.builder()
-                .id(TEN)
-                .build();
-        when(repository.findAll()).thenReturn(List.of(dummy));
+        RecipeIngredient recipeIngredient = TestData.recipeIngredient();
+        when(repository.findAll()).thenReturn(List.of(recipeIngredient));
 
         List<RecipeIngredient> actual = service.findAll();
 
-        assertThat(actual).containsExactly(dummy);
+        assertThat(actual).containsExactly(recipeIngredient);
     }
 
     @Test
@@ -86,24 +80,18 @@ class RecipeIngredientLoggingServiceTest {
 
     @Test
     void shouldReturnOneRecipeIngredientForRecipe() {
-        Recipe friedPotatoes = Recipe.builder()
-                .name("Fried potatoes")
-                .build();
-        RecipeIngredient dummy = RecipeIngredient.builder()
-                .id(TEN)
-                .build();
-        when(repository.findByRecipe(friedPotatoes)).thenReturn(List.of(dummy));
+        Recipe friedPotatoes = TestData.recipe();
+        RecipeIngredient recipeIngredient = TestData.recipeIngredient();
+        when(repository.findByRecipe(friedPotatoes)).thenReturn(List.of(recipeIngredient));
 
         List<RecipeIngredient> actual = service.findByRecipe(friedPotatoes);
 
-        assertThat(actual).containsExactly(dummy);
+        assertThat(actual).containsExactly(recipeIngredient);
     }
 
     @Test
     void shouldNotReturnRecipeIngredientWhenNotFoundForRecipe() {
-        Recipe friedPotatoes = Recipe.builder()
-                .name("Fried potatoes")
-                .build();
+        Recipe friedPotatoes = TestData.recipe();
         when(repository.findByRecipe(friedPotatoes)).thenReturn(List.of());
 
         List<RecipeIngredient> actual = service.findByRecipe(friedPotatoes);

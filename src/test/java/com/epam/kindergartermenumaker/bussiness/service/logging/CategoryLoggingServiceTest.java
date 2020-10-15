@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.TestData;
 import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.repository.CategoryRepository;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.kindergartermenumaker.TestData.MAIN_COURSE;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,8 +26,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CategoryLoggingServiceTest {
 
-    private static final String MAIN_COURSE = "Main course";
-
     @InjectMocks
     private CategoryLoggingService service;
 
@@ -32,9 +34,7 @@ class CategoryLoggingServiceTest {
 
     @Test
     void shouldCallSaveRepositoryWhenSaveTriggered() {
-        Category mainCourse = Category.builder()
-                .name(MAIN_COURSE)
-                .build();
+        Category mainCourse = TestData.category();
 
         service.save(mainCourse);
 
@@ -43,9 +43,7 @@ class CategoryLoggingServiceTest {
 
     @Test
     void shouldReturnAllCategoriesWhenFindAllTriggered() {
-        Category mainCourse = Category.builder()
-                .name(MAIN_COURSE)
-                .build();
+        Category mainCourse = TestData.category();
         when(repository.findAll()).thenReturn(List.of(mainCourse));
 
         List<Category> actual = service.findAll();
@@ -73,10 +71,8 @@ class CategoryLoggingServiceTest {
 
     @Test
     void shouldReturnCategoryWhenFindByNameExist() {
-        Category mainCourse = Category.builder()
-                .name(MAIN_COURSE)
-                .build();
-        when(repository.findByName(MAIN_COURSE)).thenReturn(Optional.ofNullable(mainCourse));
+        Category mainCourse = TestData.category();
+        when(repository.findByName(MAIN_COURSE)).thenReturn(of(mainCourse));
 
         Optional<Category> actual = service.findByName(MAIN_COURSE);
 
@@ -86,7 +82,7 @@ class CategoryLoggingServiceTest {
 
     @Test
     void shouldReturnEmptyCategoryWhenFindByNameNotExist() {
-        when(repository.findByName(MAIN_COURSE)).thenReturn(Optional.empty());
+        when(repository.findByName(MAIN_COURSE)).thenReturn(empty());
 
         Optional<Category> actual = service.findByName(MAIN_COURSE);
 

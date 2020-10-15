@@ -1,6 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.search;
 
-import com.epam.kindergartermenumaker.dao.entity.Ingredient;
+import com.epam.kindergartermenumaker.TestData;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import org.junit.jupiter.api.Test;
 
@@ -16,18 +16,16 @@ class IngredientNameSearcherTest {
 
     @Test
     void shouldReturnTrueWhenIngredientNameContainsFilter() {
-        Ingredient ingredient = Ingredient.builder().name("Milk").build();
-        RecipeIngredient recipeIngredient = RecipeIngredient.builder().ingredient(ingredient).build();
+        RecipeIngredient recipeIngredient = TestData.recipeIngredient();
 
-        boolean actual = searcher.contains(recipeIngredient, "mi");
+        boolean actual = searcher.contains(recipeIngredient, "ta");
 
         assertThat(actual).isTrue();
     }
 
     @Test
     void shouldReturnFalseWhenIngredientNameDoesNotContainsFilter() {
-        Ingredient ingredient = Ingredient.builder().name("Milk").build();
-        RecipeIngredient recipeIngredient = RecipeIngredient.builder().ingredient(ingredient).build();
+        RecipeIngredient recipeIngredient = TestData.recipeIngredient();
 
         boolean actual = searcher.contains(recipeIngredient, "qwe");
 

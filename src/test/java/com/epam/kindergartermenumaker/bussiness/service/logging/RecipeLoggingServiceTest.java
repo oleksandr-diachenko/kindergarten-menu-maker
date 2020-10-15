@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.TestData;
 import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.dao.repository.RecipeRepository;
@@ -12,6 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.kindergartermenumaker.TestData.FRIED_POTATOES;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,10 +27,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class RecipeLoggingServiceTest {
 
-    private static final String FRIED_POTATOES = "Fried potatoes";
-    private static final String MAIN_SOURCE = "Main source";
-    private static final long TEN = 10;
-
     @InjectMocks
     private RecipeLoggingService service;
 
@@ -35,9 +35,7 @@ class RecipeLoggingServiceTest {
 
     @Test
     void shouldCallSaveRepositoryWhenSaveTriggered() {
-        Recipe friedPotatoes = Recipe.builder()
-                .name(FRIED_POTATOES)
-                .build();
+        Recipe friedPotatoes = TestData.recipe();
         when(repository.save(friedPotatoes)).thenReturn(friedPotatoes);
 
         Recipe actual = service.save(friedPotatoes);
@@ -51,25 +49,23 @@ class RecipeLoggingServiceTest {
         Recipe friedPotatoes = Recipe.builder()
                 .name(FRIED_POTATOES)
                 .build();
-        when(repository.findById(TEN)).thenReturn(Optional.of(friedPotatoes));
+        when(repository.findById(1L)).thenReturn(of(friedPotatoes));
 
-        Optional<Recipe> actual = service.findById(TEN);
+        Optional<Recipe> actual = service.findById(1);
 
         assertThat(actual).isNotEmpty();
     }
 
     @Test
     void shouldReturnEmptyWhenFindByIdTriggered() {
-        Optional<Recipe> actual = service.findById(TEN);
+        Optional<Recipe> actual = service.findById(1);
 
         assertThat(actual).isEmpty();
     }
 
     @Test
     void shouldReturnAllRecipesWhenFindAllTriggered() {
-        Recipe friedPotatoes = Recipe.builder()
-                .name(FRIED_POTATOES)
-                .build();
+        Recipe friedPotatoes = TestData.recipe();
         when(repository.findAll()).thenReturn(List.of(friedPotatoes));
 
         List<Recipe> actual = service.findAll();
@@ -79,8 +75,8 @@ class RecipeLoggingServiceTest {
 
     @Test
     void shouldReturnAllRecipesByCategoryWhenFindByCategoryTriggered() {
-        Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).build();
-        Category mainSource = Category.builder().name(MAIN_SOURCE).build();
+        Recipe friedPotatoes = TestData.recipe();
+        Category mainSource = TestData.category();
         when(repository.findByCategory(mainSource)).thenReturn(List.of(friedPotatoes));
 
         List<Recipe> actual = service.findByCategory(mainSource);
@@ -108,10 +104,8 @@ class RecipeLoggingServiceTest {
 
     @Test
     void shouldReturnRecipeWhenFindByNameExist() {
-        Recipe friedPotatoes = Recipe.builder()
-                .name(FRIED_POTATOES)
-                .build();
-        when(repository.findByName(FRIED_POTATOES)).thenReturn(Optional.ofNullable(friedPotatoes));
+        Recipe friedPotatoes = TestData.recipe();
+        when(repository.findByName(FRIED_POTATOES)).thenReturn(of(friedPotatoes));
 
         Optional<Recipe> actual = service.findByName(FRIED_POTATOES);
 
@@ -121,7 +115,7 @@ class RecipeLoggingServiceTest {
 
     @Test
     void shouldReturnEmptyRecipeWhenFindByNameNotExist() {
-        when(repository.findByName(FRIED_POTATOES)).thenReturn(Optional.empty());
+        when(repository.findByName(FRIED_POTATOES)).thenReturn(empty());
 
         Optional<Recipe> actual = service.findByName(FRIED_POTATOES);
 

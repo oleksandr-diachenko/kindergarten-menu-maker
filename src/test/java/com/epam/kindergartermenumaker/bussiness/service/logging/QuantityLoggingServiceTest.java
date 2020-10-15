@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.TestData;
 import com.epam.kindergartermenumaker.dao.entity.Quantity;
 import com.epam.kindergartermenumaker.dao.repository.QuantityRepository;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,9 +24,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class QuantityLoggingServiceTest {
 
-    private static final int TEN = 10;
-    private static final long FIVE = 5;
-
     @InjectMocks
     private QuantityLoggingService service;
 
@@ -32,74 +32,69 @@ class QuantityLoggingServiceTest {
 
     @Test
     void shouldCallSaveRepositoryWhenSaveTriggered() {
-        Quantity ten = Quantity.builder()
-                .amountNet(TEN)
-                .build();
-        when(repository.save(ten)).thenReturn(ten);
+        Quantity nursery = TestData.nursery();
+        when(repository.save(nursery)).thenReturn(nursery);
 
-        Quantity actual = service.save(ten);
+        Quantity actual = service.save(nursery);
 
-        assertThat(actual.getAmountNet()).isEqualTo(TEN);
-        verify(repository).save(ten);
+        assertThat(actual.getAmountNet()).isEqualTo(5);
+        verify(repository).save(nursery);
     }
 
     @Test
     void shouldReturnNonEmptyWhenFindByIdTriggered() {
-        Quantity ten = Quantity.builder()
-                .amountNet(TEN)
-                .build();
-        when(repository.findById(FIVE)).thenReturn(Optional.of(ten));
+        Quantity nursery = TestData.nursery();
+        when(repository.findById(1L)).thenReturn(of(nursery));
 
-        Optional<Quantity> actual = service.findById(FIVE);
+        Optional<Quantity> actual = service.findById(1);
 
         assertThat(actual).isNotEmpty();
     }
 
     @Test
     void shouldReturnEmptyWhenFindByIdTriggered() {
-        Optional<Quantity> actual = service.findById(FIVE);
+        Optional<Quantity> actual = service.findById(1);
 
         assertThat(actual).isEmpty();
     }
 
     @Test
     void shouldReturnTrueWhenExistsByNetAndGross() {
-        when(repository.existsByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(true);
+        when(repository.existsByAmountNetAndAmountGross(5, 6)).thenReturn(true);
 
-        boolean actual = service.existsByAmountNetAndAmountGross(FIVE, TEN);
+        boolean actual = service.existsByAmountNetAndAmountGross(5, 6);
 
         assertThat(actual).isTrue();
     }
 
     @Test
     void shouldReturnFalseWhenNotExistsByNetAndGross() {
-        when(repository.existsByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(false);
+        when(repository.existsByAmountNetAndAmountGross(5, 6)).thenReturn(false);
 
-        boolean actual = service.existsByAmountNetAndAmountGross(FIVE, TEN);
+        boolean actual = service.existsByAmountNetAndAmountGross(5, 6);
 
         assertThat(actual).isFalse();
     }
 
     @Test
     void shouldReturnQuantityWhenFindByNetAndGrossExist() {
-        Quantity quantity = Quantity.builder()
-                .amountNet(FIVE)
-                .amountGross(TEN)
-                .build();
-        when(repository.findByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(Optional.ofNullable(quantity));
+        Quantity nursery = TestData.nursery();
+        when(repository.findByAmountNetAndAmountGross(5, 6))
+                .thenReturn(Optional.ofNullable(nursery));
 
-        Optional<Quantity> actual = service.findByAmountNetAndAmountGross(FIVE, TEN);
+        Optional<Quantity> actual = service.findByAmountNetAndAmountGross(5, 6);
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getAmountNet()).isEqualTo(FIVE);
-        assertThat(actual.get().getAmountGross()).isEqualTo(TEN);
+        assertThat(actual.get().getAmountNet()).isEqualTo(5);
+        assertThat(actual.get().getAmountGross()).isEqualTo(6);
     }
 
     @Test
     void shouldReturnEmptyQuantityWhenFindByNetAndGrossNotExist() {
-        when(repository.findByAmountNetAndAmountGross(FIVE, TEN)).thenReturn(Optional.empty());
+        when(repository.findByAmountNetAndAmountGross(5, 6))
+                .thenReturn(empty());
 
-        Optional<Quantity> actual = service.findByAmountNetAndAmountGross(FIVE, TEN);
+        Optional<Quantity> actual = service.findByAmountNetAndAmountGross(5, 6);
 
         assertThat(actual).isEmpty();
     }

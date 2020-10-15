@@ -1,10 +1,13 @@
 package com.epam.kindergartermenumaker.web.converter.recipeingredient;
 
+import com.epam.kindergartermenumaker.TestData;
 import com.epam.kindergartermenumaker.dao.entity.Ingredient;
 import com.epam.kindergartermenumaker.dao.entity.Quantity;
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import org.junit.jupiter.api.Test;
 
+import static com.epam.kindergartermenumaker.TestData.*;
+import static com.epam.kindergartermenumaker.TestData.nursery;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -34,7 +37,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryFatWhenIngredientNull() {
-        Quantity nurseryQuantity = Quantity.builder().amountNet(5).build();
+        Quantity nurseryQuantity = nursery();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(null, nurseryQuantity, null);
 
@@ -43,7 +46,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryFatWhenQuantityNull() {
-        Ingredient ingredient = Ingredient.builder().carbohydrate(2).protein(3).fat(4).build();
+        Ingredient ingredient = ingredient();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, null, null);
 
@@ -52,7 +55,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryProteinWhenIngredientNull() {
-        Quantity nurseryQuantity = Quantity.builder().amountNet(5).build();
+        Quantity nurseryQuantity = nursery();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(null, nurseryQuantity, null);
 
@@ -61,7 +64,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryProteinWhenQuantityNull() {
-        Ingredient ingredient = Ingredient.builder().carbohydrate(2).protein(3).fat(4).build();
+        Ingredient ingredient = ingredient();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, null, null);
 
@@ -70,7 +73,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryCarbohydrateWhenIngredientNull() {
-        Quantity nurseryQuantity = Quantity.builder().amountNet(5).build();
+        Quantity nurseryQuantity = nursery();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(null, nurseryQuantity, null);
 
@@ -79,7 +82,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryCarbohydrateWhenQuantityNull() {
-        Ingredient ingredient = Ingredient.builder().carbohydrate(2).protein(3).fat(4).build();
+        Ingredient ingredient = ingredient();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, null, null);
 
@@ -88,7 +91,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateKindergartenFatWhenIngredientNull() {
-        Quantity kindergartenQuantity = Quantity.builder().amountNet(5).build();
+        Quantity kindergartenQuantity = kindergarten();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(null, kindergartenQuantity, null);
 
@@ -97,7 +100,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateKindergartenFatWhenQuantityNull() {
-        Ingredient ingredient = Ingredient.builder().carbohydrate(2).protein(3).fat(4).build();
+        Ingredient ingredient = ingredient();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, null, null);
 
@@ -106,7 +109,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryKindergartenProteinWhenIngredientNull() {
-        Quantity kindergartenQuantity = Quantity.builder().amountNet(5).build();
+        Quantity kindergartenQuantity = kindergarten();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(null, kindergartenQuantity, null);
 
@@ -115,7 +118,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateNurseryKindergartenProteinWhenQuantityNull() {
-        Ingredient ingredient = Ingredient.builder().carbohydrate(2).protein(3).fat(4).build();
+        Ingredient ingredient = ingredient();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, null, null);
 
@@ -124,7 +127,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateKindergartenCarbohydrateWhenIngredientNull() {
-        Quantity kindergartenQuantity = Quantity.builder().amountNet(5).build();
+        Quantity kindergartenQuantity = kindergarten();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(null, kindergartenQuantity, null);
 
@@ -133,7 +136,7 @@ class RecipeIngredientDTOTest {
 
     @Test
     void shouldNotCalculateKindergartenCarbohydrateWhenQuantityNull() {
-        Ingredient ingredient = Ingredient.builder().carbohydrate(2).protein(3).fat(4).build();
+        Ingredient ingredient = ingredient();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, null, null);
 
@@ -143,8 +146,8 @@ class RecipeIngredientDTOTest {
     @Test
     void shouldSetEnergyValueAsZeroWhenAllMineralsIsZero() {
         Ingredient ingredient = Ingredient.builder().carbohydrate(0).protein(0).fat(0).build();
-        Quantity nurseryQuantity = Quantity.builder().amountNet(5).build();
-        Quantity kindergartenQuantity = Quantity.builder().amountNet(7).build();
+        Quantity nurseryQuantity = nursery();
+        Quantity kindergartenQuantity = kindergarten();
 
         RecipeIngredientDTO recipeIngredientDTO = buildRecipeIngredientDTO(ingredient, nurseryQuantity, kindergartenQuantity);
 

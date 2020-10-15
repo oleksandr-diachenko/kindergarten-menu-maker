@@ -48,6 +48,7 @@ public class RecipeServiceAdapterImpl implements RecipeServiceAdapter {
 
     private void updateRecipe(RecipeForm recipeForm, Recipe recipe) {
         checkIfRecipeAlreadyExists(recipeForm);
+
         recipe.setName(recipeForm.getRecipeName());
         recipe.setDescription(recipeForm.getRecipeDescription());
         Category category = retrieveCategory(recipeForm.getCategoryName());

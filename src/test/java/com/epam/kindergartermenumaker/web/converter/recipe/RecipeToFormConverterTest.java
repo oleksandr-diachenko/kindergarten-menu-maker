@@ -1,10 +1,6 @@
 package com.epam.kindergartermenumaker.web.converter.recipe;
 
 import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeIngredientService;
-import com.epam.kindergartermenumaker.dao.entity.Category;
-import com.epam.kindergartermenumaker.dao.entity.Recipe;
-import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
-import com.epam.kindergartermenumaker.web.adapter.IngredientForm;
 import com.epam.kindergartermenumaker.web.adapter.RecipeForm;
 import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientToFormConverter;
 import org.junit.jupiter.api.Test;
@@ -15,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static com.epam.kindergartermenumaker.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -24,10 +21,6 @@ import static org.mockito.Mockito.when;
  **/
 @ExtendWith(MockitoExtension.class)
 class RecipeToFormConverterTest {
-
-    private static final String FRIED_POTATOES = "Fried potatoes";
-    private static final String FRIED_POTATOES_IN_A_SKILLET = "Fried potatoes in a skillet";
-    private static final String MAIN_SOURCE = "Main source";
 
     @InjectMocks
     private RecipeToFormConverter converter;
@@ -39,18 +32,15 @@ class RecipeToFormConverterTest {
 
     @Test
     void shouldConvertRecipeToRecipeForm() {
-        Category mainSource = Category.builder().name(MAIN_SOURCE).build();
-        Recipe friedPotatoes = Recipe.builder().id(1).name(FRIED_POTATOES).category(mainSource)
-                .description(FRIED_POTATOES_IN_A_SKILLET).build();
-        when(recipeIngredientService.findByRecipe(friedPotatoes)).thenReturn(List.of(new RecipeIngredient()));
-        when(recipeIngredientToFormConverter.convert(new RecipeIngredient())).thenReturn(new IngredientForm());
+        when(recipeIngredientService.findByRecipe(recipe())).thenReturn(List.of(recipeIngredient()));
+        when(recipeIngredientToFormConverter.convert(recipeIngredient())).thenReturn(ingredientForm());
 
-        RecipeForm recipeForm = converter.convert(friedPotatoes);
+        RecipeForm recipeForm = converter.convert(recipe());
 
         assertThat(recipeForm.getRecipeId()).isEqualTo(1);
-        assertThat(recipeForm.getCategoryName()).isEqualTo(MAIN_SOURCE);
+        assertThat(recipeForm.getCategoryName()).isEqualTo(MAIN_COURSE);
         assertThat(recipeForm.getRecipeName()).isEqualTo(FRIED_POTATOES);
         assertThat(recipeForm.getRecipeDescription()).isEqualTo(FRIED_POTATOES_IN_A_SKILLET);
-        assertThat(recipeForm.getIngredients()).containsExactly(new IngredientForm());
+        assertThat(recipeForm.getIngredients()).containsExactly(ingredientForm());
     }
 }

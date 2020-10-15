@@ -2,13 +2,13 @@ package com.epam.kindergartermenumaker.web.converter.recipeingredient;
 
 import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import com.epam.kindergartermenumaker.web.converter.Converter;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * @author : Oleksandr Diachenko
  * @since : 9/29/2020
  **/
-@Service
+@Component
 public class RecipeIngredientToDtoConverter implements Converter<RecipeIngredient, RecipeIngredientDTO> {
 
     @Override

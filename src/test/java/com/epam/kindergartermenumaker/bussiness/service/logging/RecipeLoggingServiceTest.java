@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.epam.kindergartermenumaker.TestData.FRIED_POTATOES;
+import static com.epam.kindergartermenumaker.TestData.recipe;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -120,5 +121,23 @@ class RecipeLoggingServiceTest {
         Optional<Recipe> actual = service.findByName(FRIED_POTATOES);
 
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void shouldReturnRecipesWhenRecipeByNameTriggered() {
+        when(repository.findByNameContainsIgnoreCase(FRIED_POTATOES)).thenReturn(List.of(recipe()));
+
+        List<Recipe> recipes = service.findByNameContainsIgnoreCase(FRIED_POTATOES);
+
+        assertThat(recipes).containsExactly(recipe());
+    }
+
+    @Test
+    void shouldReturnEmptyRecipesWhenRecipeByNameNotFound() {
+        when(repository.findByNameContainsIgnoreCase(FRIED_POTATOES)).thenReturn(List.of());
+
+        List<Recipe> recipes = service.findByNameContainsIgnoreCase(FRIED_POTATOES);
+
+        assertThat(recipes).isEmpty();
     }
 }

@@ -4,13 +4,13 @@ import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.converter.Converter;
 import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientConverterService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * @author : Oleksandr Diachenko
  * @since : 9/18/2020
  **/
-@Service
+@Component
 @RequiredArgsConstructor
 public class RecipeToDtoConverter implements Converter<Recipe, RecipeDTO> {
 

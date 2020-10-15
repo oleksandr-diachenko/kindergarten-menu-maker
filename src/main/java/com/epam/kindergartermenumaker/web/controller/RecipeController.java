@@ -35,8 +35,13 @@ public class RecipeController {
     private final Parser<RecipeForm> parser;
 
     @GetMapping
-    public String getAllCategories(Model model) {
-        List<CategoryDTO> categoryDTOS = categoryConverterService.getAllNonEmptyCategories();
+    public String getAllCategories(Model model, @RequestParam(defaultValue = "") String filter) {
+        List<CategoryDTO> categoryDTOS;
+        if (filter.isEmpty()) {
+            categoryDTOS = categoryConverterService.getAllNonEmptyCategories();
+        } else {
+            categoryDTOS = categoryConverterService.getCategoriesByFilter(filter);
+        }
         model.addAttribute("categories", categoryDTOS);
         return RECIPES;
     }

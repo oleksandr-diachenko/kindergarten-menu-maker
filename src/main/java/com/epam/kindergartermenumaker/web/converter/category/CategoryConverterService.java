@@ -9,4 +9,6 @@ import java.util.List;
 public interface CategoryConverterService {
 
     List<CategoryDTO> getAllNonEmptyCategories();
+
+    List<CategoryDTO> getCategoriesByFilter(String filter);
 }

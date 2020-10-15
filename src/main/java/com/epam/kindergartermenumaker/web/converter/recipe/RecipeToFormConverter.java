@@ -7,7 +7,7 @@ import com.epam.kindergartermenumaker.web.adapter.RecipeForm;
 import com.epam.kindergartermenumaker.web.converter.Converter;
 import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientToFormConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * @author : Oleksandr Diachenko
  * @since : 10/7/2020
  **/
-@Service
+@Component
 @RequiredArgsConstructor
 public class RecipeToFormConverter implements Converter<Recipe, RecipeForm> {
 

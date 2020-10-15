@@ -6,7 +6,7 @@ import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.converter.Converter;
 import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @author : Oleksandr Diachenko
  * @since : 9/25/2020
  **/
-@Service
+@Component
 @RequiredArgsConstructor
 public class CategoryToDtoConverter implements Converter<Category, CategoryDTO> {
 

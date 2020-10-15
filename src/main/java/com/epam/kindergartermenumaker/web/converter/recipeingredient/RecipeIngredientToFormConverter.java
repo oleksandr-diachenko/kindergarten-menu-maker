@@ -6,13 +6,13 @@ import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import com.epam.kindergartermenumaker.web.adapter.IngredientForm;
 import com.epam.kindergartermenumaker.web.converter.Converter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * @author : Oleksandr Diachenko
  * @since : 10/7/2020
  **/
-@Service
+@Component
 @RequiredArgsConstructor
 public class RecipeIngredientToFormConverter implements Converter<RecipeIngredient, IngredientForm> {
 

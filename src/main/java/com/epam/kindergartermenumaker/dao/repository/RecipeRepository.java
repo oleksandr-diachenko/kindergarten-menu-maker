@@ -20,4 +20,6 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
     boolean existsByName(String name);
 
     Optional<Recipe> findByName(String name);
+
+    List<Recipe> findByNameContainsIgnoreCase(String filter);
 }

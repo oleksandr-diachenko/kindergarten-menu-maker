@@ -67,4 +67,11 @@ public class RecipeLoggingService implements RecipeService {
                 () -> log.debug(format("Recipe with name %s not found", name)));
         return optional;
     }
+
+    @Override
+    public List<Recipe> findByNameContainsIgnoreCase(String filter) {
+        List<Recipe> recipes = recipeRepository.findByNameContainsIgnoreCase(filter);
+        log.debug(format("Returned by filter: %s all recipes: %s", filter, recipes));
+        return recipes;
+    }
 }

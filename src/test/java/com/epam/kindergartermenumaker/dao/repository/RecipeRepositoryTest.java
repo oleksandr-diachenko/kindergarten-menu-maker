@@ -142,6 +142,17 @@ class RecipeRepositoryTest {
         assertThat(actual).isEmpty();
     }
 
+    @Test
+    void shouldReturnRecipesWhenRecipesByName() {
+        Category mainCourse = prepareCategory();
+        Recipe recipe = Recipe.builder().name(FRIED_POTATOES).category(mainCourse).build();
+        manager.persistAndFlush(recipe);
+
+        List<Recipe> recipes = recipeRepository.findByNameContainsIgnoreCase(FRIED_POTATOES);
+
+        assertThat(recipes).isNotEmpty();
+    }
+
     private Category prepareCategory() {
         Category category = Category.builder()
                 .name(MAIN_COURSE)

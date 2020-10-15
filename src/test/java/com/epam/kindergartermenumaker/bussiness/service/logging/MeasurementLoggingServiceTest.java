@@ -1,5 +1,6 @@
 package com.epam.kindergartermenumaker.bussiness.service.logging;
 
+import com.epam.kindergartermenumaker.TestData;
 import com.epam.kindergartermenumaker.dao.entity.Measurement;
 import com.epam.kindergartermenumaker.dao.repository.MeasurementRepository;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.epam.kindergartermenumaker.TestData.GRAM;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,9 +25,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MeasurementLoggingServiceTest {
 
-    private static final String GRAM = "Gram";
-    private static final long TEN = 10;
-
     @InjectMocks
     private MeasurementLoggingService service;
 
@@ -32,9 +33,7 @@ class MeasurementLoggingServiceTest {
 
     @Test
     void shouldCallSaveRepositoryWhenSaveTriggered() {
-        Measurement gram = Measurement.builder()
-                .description(GRAM)
-                .build();
+        Measurement gram = TestData.measurement();
         when(repository.save(gram)).thenReturn(gram);
 
         Measurement actual = service.save(gram);
@@ -45,19 +44,17 @@ class MeasurementLoggingServiceTest {
 
     @Test
     void shouldReturnNonEmptyWhenFindByIdTriggered() {
-        Measurement gram = Measurement.builder()
-                .description(GRAM)
-                .build();
-        when(repository.findById(TEN)).thenReturn(Optional.of(gram));
+        Measurement gram = TestData.measurement();
+        when(repository.findById(1L)).thenReturn(of(gram));
 
-        Optional<Measurement> actual = service.findById(TEN);
+        Optional<Measurement> actual = service.findById(1);
 
         assertThat(actual).isNotEmpty();
     }
 
     @Test
     void shouldReturnEmptyWhenFindByIdTriggered() {
-        Optional<Measurement> actual = service.findById(TEN);
+        Optional<Measurement> actual = service.findById(1);
 
         assertThat(actual).isEmpty();
     }
@@ -82,10 +79,8 @@ class MeasurementLoggingServiceTest {
 
     @Test
     void shouldReturnMeasurementWhenFindByNameExist() {
-        Measurement gram = Measurement.builder()
-                .description(GRAM)
-                .build();
-        when(repository.findByDescription(GRAM)).thenReturn(Optional.ofNullable(gram));
+        Measurement gram = TestData.measurement();
+        when(repository.findByDescription(GRAM)).thenReturn(of(gram));
 
         Optional<Measurement> actual = service.findByDescription(GRAM);
 
@@ -95,7 +90,7 @@ class MeasurementLoggingServiceTest {
 
     @Test
     void shouldReturnEmptyMeasurementWhenFindByNameNotExist() {
-        when(repository.findByDescription(GRAM)).thenReturn(Optional.empty());
+        when(repository.findByDescription(GRAM)).thenReturn(empty());
 
         Optional<Measurement> actual = service.findByDescription(GRAM);
 

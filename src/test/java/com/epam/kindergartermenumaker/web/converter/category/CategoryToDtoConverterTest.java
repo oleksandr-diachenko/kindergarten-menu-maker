@@ -1,7 +1,6 @@
 package com.epam.kindergartermenumaker.web.converter.category;
 
 import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeService;
-import com.epam.kindergartermenumaker.dao.entity.Category;
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.converter.Converter;
 import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
@@ -13,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static com.epam.kindergartermenumaker.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -23,9 +23,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CategoryToDtoConverterTest {
 
-    private static final String FRIED_POTATOES = "Fried potatoes";
-    private static final String MAIN_SOURCE = "Main source";
-
     @InjectMocks
     private CategoryToDtoConverter converter;
     @Mock
@@ -35,15 +32,12 @@ class CategoryToDtoConverterTest {
 
     @Test
     void shouldSetAllRecipeIngredient() {
-        Category mainSource = Category.builder().name(MAIN_SOURCE).build();
-        Recipe friedPotatoes = Recipe.builder().name(FRIED_POTATOES).build();
-        when(recipeService.findByCategory(mainSource)).thenReturn(List.of(friedPotatoes));
-        RecipeDTO friedPotatoesDTO = RecipeDTO.builder().recipe(friedPotatoes).build();
-        when(recipeToDTOConverter.convert(friedPotatoes)).thenReturn(friedPotatoesDTO);
+        when(recipeService.findByCategory(category())).thenReturn(List.of(recipe()));
+        when(recipeToDTOConverter.convert(recipe())).thenReturn(recipeDTO());
 
-        CategoryDTO recipeDTO = converter.convert(mainSource);
+        CategoryDTO recipeDTO = converter.convert(category());
 
-        assertThat(recipeDTO.getCategory()).isEqualTo(mainSource);
-        assertThat(recipeDTO.getRecipes()).containsExactly(friedPotatoesDTO);
+        assertThat(recipeDTO.getCategory()).isEqualTo(category());
+        assertThat(recipeDTO.getRecipes()).containsExactly(recipeDTO());
     }
 }

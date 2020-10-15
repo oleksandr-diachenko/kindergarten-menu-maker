@@ -1,15 +1,10 @@
 package com.epam.kindergartermenumaker.web.controller;
 
 import com.epam.kindergartermenumaker.bussiness.service.parser.Parser;
-import com.epam.kindergartermenumaker.dao.entity.Category;
-import com.epam.kindergartermenumaker.dao.entity.Recipe;
-import com.epam.kindergartermenumaker.dao.entity.RecipeIngredient;
 import com.epam.kindergartermenumaker.web.adapter.RecipeForm;
 import com.epam.kindergartermenumaker.web.adapter.RecipeServiceAdapter;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryConverterService;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
-import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
-import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static com.epam.kindergartermenumaker.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -33,8 +29,6 @@ import static org.mockito.Mockito.*;
  **/
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
-
-    private static final String FRIED_POTATOES = "Fried potatoes";
 
     @InjectMocks
     private RecipeController controller;
@@ -53,7 +47,7 @@ class RecipeControllerTest {
 
     @Test
     void shouldSetAllNonEmptyRecipeDTOsAndReturnRecipesPage() {
-        List<CategoryDTO> categoriesDTOs = List.of(CategoryDTO.builder().build());
+        List<CategoryDTO> categoriesDTOs = List.of(categoryDTO());
         when(service.getAllNonEmptyCategories()).thenReturn(categoriesDTOs);
 
         String page = controller.getAllCategories(model, "");
@@ -64,7 +58,7 @@ class RecipeControllerTest {
 
     @Test
     void shouldSetRecipeDTOsByFilterAndReturnRecipesPage() {
-        List<CategoryDTO> categoriesDTOs = List.of(CategoryDTO.builder().build());
+        List<CategoryDTO> categoriesDTOs = List.of(categoryDTO());
         when(service.getCategoriesByFilter("main")).thenReturn(categoriesDTOs);
 
         String page = controller.getAllCategories(model, "main");
@@ -75,7 +69,8 @@ class RecipeControllerTest {
 
     @Test
     void shouldSaveRecipeFormAndRedirectToRecipesPageWhenRecipeIdIsZero() {
-        RecipeForm recipeForm = new RecipeForm();
+        RecipeForm recipeForm = recipeForm();
+        recipeForm.setRecipeId(0);
 
         String page = controller.updateRecipe(recipeForm);
 
@@ -86,8 +81,7 @@ class RecipeControllerTest {
 
     @Test
     void shouldUpdateRecipeFormAndRedirectToRecipesPageWhenRecipeIdIsMoreTheZero() {
-        RecipeForm recipeForm = new RecipeForm();
-        recipeForm.setRecipeId(1);
+        RecipeForm recipeForm = recipeForm();
 
         String page = controller.updateRecipe(recipeForm);
 
@@ -110,7 +104,7 @@ class RecipeControllerTest {
     @Test
     void shouldSetRecipeFormAndReturnUpdateRecipePageWhenFileUploaded() throws IOException {
         when(file.getInputStream()).thenReturn(inputStream);
-        RecipeForm recipeForm = new RecipeForm();
+        RecipeForm recipeForm = recipeForm();
         when(parser.parse(inputStream)).thenReturn(recipeForm);
 
         String page = controller.loadRecipe(model, file);
@@ -122,35 +116,11 @@ class RecipeControllerTest {
 
     @Test
     void shouldSetRecipeFormOnUpdate() {
-        when(recipeServiceAdapter.findByRecipeName(FRIED_POTATOES)).thenReturn(new RecipeForm());
+        when(recipeServiceAdapter.findByRecipeName(FRIED_POTATOES)).thenReturn(recipeForm());
 
         String page = controller.getUpdateRecipeForm(model, FRIED_POTATOES);
 
-        verify(model).addAttribute("recipeForm", new RecipeForm());
+        verify(model).addAttribute("recipeForm", recipeForm());
         assertThat(page).isEqualTo("update-recipe");
-    }
-
-    private CategoryDTO buildCategoryDTO(Category category, List<RecipeDTO> recipeDTOS) {
-        return CategoryDTO.builder()
-                .category(category)
-                .recipes(recipeDTOS)
-                .build();
-    }
-
-    private RecipeIngredientDTO buildRecipeIngredientDTO(Recipe recipe) {
-        RecipeIngredient recipeIngredient = RecipeIngredient.builder()
-                .id(10)
-                .recipe(recipe)
-                .build();
-        return RecipeIngredientDTO.builder()
-                .recipeIngredient(recipeIngredient)
-                .build();
-    }
-
-    private RecipeDTO buildRecipeDTO(Recipe recipe, List<RecipeIngredientDTO> recipeIngredients) {
-        return RecipeDTO.builder()
-                .recipe(recipe)
-                .ingredients(recipeIngredients)
-                .build();
     }
 }

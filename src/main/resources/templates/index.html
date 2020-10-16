@@ -1,10 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:include="fragments/head :: head"></head>
-<body>
 <nav th:replace="fragments/header :: header"></nav>
 <div class="container">
-    У розробці
+    <div class="text-center">
+        <h3 class="mb-4 text-primary"> Сайт для допомоги дієтсестрам в написанні став для дитячих садків.</h3>
+    </div>
+    <hr/>
+    <ul>
+        <li class="mb-2 text-info">
+            Щоб подивитися всі доступні технологічні картки страв, перейдіть за посиланням:
+            <a class="text-info font-weight-bold" th:href="@{/recipes}">Рецепти</a>
+        </li>
+        <li class="mb-2 text-info">
+            Щоб знайти необхідну технологічну картку:
+            <ul>
+                <li>Перейдіть за посиланням:
+                    <a class="text-info font-weight-bold" th:href="@{/recipes}">Рецепти</a>
+                </li>
+                <li>Введіть у пошук всю або частину назви рецепту</li>
+                <li>Натісність <code>Знайти</code></li>
+            </ul>
+        </li>
+        <li class="mb-2 text-info">
+            Щоб розрахувати кількість індгредієнтів на кількість дітей:
+            <ul>
+                <li>Відкрийте технологічну картку страви</li>
+                <li>Знизу натисніть <code>Опції</code></li>
+                <li>Введіть необхідну кількість дітей</li>
+                <li>Натісність <code>Розрахувати</code></li>
+            </ul>
+        </li>
+        <li class="mb-2 text-info">
+            Щоб додати нову технологічну картку:
+            <ul>
+                <li>Зверху сторінки введіть у поле кількість інгредієнтів у страві</li>
+                <li>Натисніть <code>Створити</code></li>
+                <li>Заповніть всі данні</li>
+                <li>Натисніть <code>Зберегти</code></li>
+            </ul>
+        </li>
+        <li class="mb-2 text-info">
+            Щоб відредагувати технологічну картку:
+            <ul>
+                <li>Відкрийте технологічну картку страви</li>
+                <li>Знизу натисніть <code>Опції</code></li>
+                <li>Натисніть <code>Змінити</code></li>
+                <li>Заповніть всі данні</li>
+                <li>Натисніть <code>Зберегти</code></li>
+            </ul>
+        </li>
+    </ul>
 </div>
 <footer th:replace="fragments/footer :: footer"></footer>
 </body>

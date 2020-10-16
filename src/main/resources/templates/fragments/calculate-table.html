@@ -26,11 +26,11 @@
             <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.nurseryQuantity.amountGross * nursery)}">
                 -
             </td>
-            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.kindergartenQuantity.amountGross * nursery)}">
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.kindergartenQuantity.amountGross * kindergarten)}">
                 -
             </td>
 
-            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.nurseryQuantity.amountNet * kindergarten)}">
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.nurseryQuantity.amountNet * nursery)}">
                 -
             </td>
             <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.kindergartenQuantity.amountNet * kindergarten)}">

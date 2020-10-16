@@ -1,11 +1,15 @@
 package com.epam.kindergartermenumaker.web.controller;
 
+import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeService;
 import com.epam.kindergartermenumaker.bussiness.service.parser.Parser;
+import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.adapter.IngredientForm;
 import com.epam.kindergartermenumaker.web.adapter.RecipeForm;
 import com.epam.kindergartermenumaker.web.adapter.RecipeServiceAdapter;
+import com.epam.kindergartermenumaker.web.converter.Converter;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryConverterService;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
+import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +37,8 @@ public class RecipeController {
     private final CategoryConverterService categoryConverterService;
     private final RecipeServiceAdapter recipeServiceAdapter;
     private final Parser<RecipeForm> parser;
+    private final RecipeService recipeService;
+    private final Converter<Recipe, RecipeDTO> recipeToDtoConverter;
 
     @GetMapping
     public String getAllCategories(Model model, @RequestParam(defaultValue = "") String filter) {
@@ -79,5 +85,18 @@ public class RecipeController {
     public String loadRecipe(Model model, @RequestParam("file") MultipartFile file) throws IOException {
         model.addAttribute(RECIPE_FORM, parser.parse(file.getInputStream()));
         return UPDATE_RECIPE;
+    }
+
+    @PostMapping("/calculate")
+    public String calculateRecipe(Model model,
+                                  @RequestParam String name,
+                                  @RequestParam(defaultValue = "1") int nursery,
+                                  @RequestParam(defaultValue = "1") int kindergarten) {
+        recipeService.findByName(name).ifPresent(recipe -> {
+            model.addAttribute("recipe", recipeToDtoConverter.convert(recipe));
+            model.addAttribute("nursery", nursery);
+            model.addAttribute("kindergarten", kindergarten);
+        });
+        return "calculate";
     }
 }

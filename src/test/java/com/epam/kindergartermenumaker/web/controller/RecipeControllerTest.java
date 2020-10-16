@@ -1,10 +1,14 @@
 package com.epam.kindergartermenumaker.web.controller;
 
+import com.epam.kindergartermenumaker.bussiness.service.logging.RecipeService;
 import com.epam.kindergartermenumaker.bussiness.service.parser.Parser;
+import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.adapter.RecipeForm;
 import com.epam.kindergartermenumaker.web.adapter.RecipeServiceAdapter;
+import com.epam.kindergartermenumaker.web.converter.Converter;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryConverterService;
 import com.epam.kindergartermenumaker.web.converter.category.CategoryDTO;
+import com.epam.kindergartermenumaker.web.converter.recipe.RecipeDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,6 +23,8 @@ import java.io.InputStream;
 import java.util.List;
 
 import static com.epam.kindergartermenumaker.TestData.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -44,6 +50,10 @@ class RecipeControllerTest {
     private Parser<RecipeForm> parser;
     @Mock
     private InputStream inputStream;
+    @Mock
+    private RecipeService recipeService;
+    @Mock
+    private Converter<Recipe, RecipeDTO> recipeToDtoConverter;
 
     @Test
     void shouldSetAllNonEmptyRecipeDTOsAndReturnRecipesPage() {
@@ -122,5 +132,28 @@ class RecipeControllerTest {
 
         verify(model).addAttribute("recipeForm", recipeForm());
         assertThat(page).isEqualTo("update-recipe");
+    }
+
+    @Test
+    void shouldSetRecipeDtoAndNurseryCountAndKindergartenCountAndReturnCalculatePage() {
+        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(of(recipe()));
+        when(recipeToDtoConverter.convert(recipe())).thenReturn(recipeDTO());
+
+        String page = controller.calculateRecipe(model, FRIED_POTATOES, 1, 2);
+
+        verify(model).addAttribute("recipe", recipeDTO());
+        verify(model).addAttribute("nursery", 1);
+        verify(model).addAttribute("kindergarten", 2);
+        assertThat(page).isEqualTo("calculate");
+    }
+
+    @Test
+    void shouldReturnCalculatePage() {
+        when(recipeService.findByName(FRIED_POTATOES)).thenReturn(empty());
+
+        String page = controller.calculateRecipe(model, FRIED_POTATOES, 1, 2);
+
+        verify(model, never()).addAttribute(any(), any());
+        assertThat(page).isEqualTo("calculate");
     }
 }

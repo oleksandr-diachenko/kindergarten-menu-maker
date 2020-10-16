@@ -1,0 +1,42 @@
+<div th:fragment="calculate-table" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <table th:id="'table' + ${recipe.recipe.id}" class="table table-hover table-sm table-bordered table-responsive-md">
+        <caption class="font-italic" th:text="'Таблиця інгредієнтів для рецепту: ' + ${recipe.recipe.name} +
+        ' на ясля: ' + ${nursery} + ' та садок: ' + ${kindergarten}"></caption>
+        <thead class="thead-light">
+        <tr>
+            <th class="text-center align-middle" scope="col" rowspan="3">Продукти</th>
+            <th class="text-center" scope="col" colspan="4">Маса, <span class="font-italic"> г</span></th>
+        </tr>
+        <tr>
+            <th class="text-center" scope="col" colspan="2">брутто</th>
+            <th class="text-center" scope="col" colspan="2">нетто</th>
+        </tr>
+        <tr>
+            <th scope="col">ясла</th>
+            <th scope="col">садок</th>
+            <th scope="col">ясла</th>
+            <th scope="col">садок</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ingredient : ${recipe.ingredients}">
+            <th th:text="${ingredient.recipeIngredient.ingredient.name}"> -</th>
+
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.nurseryQuantity.amountGross * nursery)}">
+                -
+            </td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.kindergartenQuantity.amountGross * nursery)}">
+                -
+            </td>
+
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.nurseryQuantity.amountNet * kindergarten)}">
+                -
+            </td>
+            <td th:text="${#number.removeTrailingZeroes(ingredient.recipeIngredient.kindergartenQuantity.amountNet * kindergarten)}">
+                -
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -2,10 +2,7 @@ package com.epam.kindergartermenumaker.web.converter.recipe;
 
 import com.epam.kindergartermenumaker.dao.entity.Recipe;
 import com.epam.kindergartermenumaker.web.converter.recipeingredient.RecipeIngredientDTO;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -17,6 +14,7 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode
+@RequiredArgsConstructor
 public class RecipeDTO implements Comparable<RecipeDTO> {
 
     private final Recipe recipe;

@@ -1,0 +1,24 @@
+<div th:fragment="recipe-options" xmlns:th="http://www.w3.org/1999/xhtml">
+    <button class="float-right btn btn-link" data-toggle="collapse"
+            aria-expanded="true"
+            th:attr="aria-controls='collapse' + ${recipe.recipe.id} + 'options',
+                                data-target='#collapse' + ${recipe.recipe.id} + 'options'">Опції
+    </button>
+    <div th:id="collapse + ${recipe.recipe.id} + options" class="collapse"
+         th:attr="aria-labelledby='collapse' + ${recipe.recipe.id} + 'options'">
+        <form class="form-inline" action="#" th:action="@{/recipes/calculate(name=${recipe.recipe.name})}"
+              method="post">
+            <div class="form-group mr-1 ml-1 mb-1">
+                <input type="text" class="form-control" th:name="nursery"
+                       placeholder="Кількість ясель"/>
+            </div>
+            <div class="form-group mr-1 ml-1 mb-1">
+                <input type="text" class="form-control" th:name="kindergarten"
+                       placeholder="Кількість саду"/>
+            </div>
+            <button type="submit" class="btn btn-outline-secondary mb-1">Порахувати</button>
+            <a th:href="@{/recipes/update(name=${recipe.recipe.name})}"
+               class="btn btn-outline-secondary ml-5 mb-1">Змінити</a>
+        </form>
+    </div>
+</div>

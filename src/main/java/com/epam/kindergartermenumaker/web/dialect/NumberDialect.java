@@ -17,7 +17,7 @@ import static java.util.Collections.singleton;
 @Component
 public class NumberDialect extends AbstractDialect implements IExpressionObjectDialect {
 
-    NumberDialect() {
+    public NumberDialect() {
         super("Number dialect");
     }
 
